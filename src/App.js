@@ -228,30 +228,55 @@ const Navbar = ({ scrolled }) => {
   );
 };
 
-// Hero Section Component
-const HeroSection = () => {
+// Custom Typing Animation Component
+const TypingAnimation = () => {
   const [text, setText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
   const fullText = 'Backend Developer';
 
   useEffect(() => {
     let index = 0;
-    const timer = setInterval(() => {
+    let typingInterval;
+    let cursorInterval;
+
+    const typeText = () => {
       if (index < fullText.length) {
         setText(fullText.slice(0, index + 1));
         index++;
       } else {
-        clearInterval(timer);
-        // Reset animation after 2 seconds
+        // Pause at the end of typing
         setTimeout(() => {
-          setText('');
           index = 0;
+          setText('');
+          typingInterval = setInterval(typeText, 150);
         }, 2000);
+        clearInterval(typingInterval);
       }
-    }, 150);
+    };
 
-    return () => clearInterval(timer);
+    typingInterval = setInterval(typeText, 150);
+
+    // Blinking cursor
+    cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+
+    return () => {
+      clearInterval(typingInterval);
+      clearInterval(cursorInterval);
+    };
   }, []);
 
+  return (
+    <span>
+      {text}
+      <span className={`ml-1 inline-block w-1 h-8 bg-[#00f7ff] ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
+    </span>
+  );
+};
+
+// Hero Section Component
+const HeroSection = () => {
   return (
     <motion.section
       className="min-h-screen flex flex-col items-center justify-center px-4 text-center"
@@ -273,8 +298,7 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.8 }}
       >
-        {text}
-        <span className="ml-1 inline-block w-1 h-8 bg-[#00f7ff] animate-pulse"></span>
+        <TypingAnimation />
       </motion.p>
       <motion.p
         className="text-xl md:text-2xl mb-10 max-w-2xl"
