@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -49,12 +49,51 @@ function App() {
           }}
         />
       </div>
+      
+      {/* Animated particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-[#6a0dad]"
+            initial={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              opacity: 0,
+              scale: 0.5,
+            }}
+            animate={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              opacity: [0, 0.5, 0],
+              scale: [0.5, 1.5, 0.5],
+            }}
+            transition={{
+              duration: 10 + Math.random() * 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              width: Math.random() * 10 + 2,
+              height: Math.random() * 10 + 2,
+            }}
+          />
+        ))}
+      </div>
 
       <main className="relative z-10 pt-16">
-        <HeroSection />
-        <AboutSection />
-        <ProjectsSection />
-        <ContactSection />
+        <div id="beranda">
+          <HeroSection />
+        </div>
+        <div id="tentang">
+          <AboutSection />
+        </div>
+        <div id="proyek">
+          <ProjectsSection />
+        </div>
+        <div id="kontak">
+          <ContactSection />
+        </div>
       </main>
       
       <Footer />
@@ -65,6 +104,30 @@ function App() {
 // Navbar Component
 const Navbar = ({ scrolled }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('beranda');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['beranda', 'tentang', 'proyek', 'kontak'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const height = element.offsetHeight;
+          
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <motion.nav
@@ -87,19 +150,34 @@ const Navbar = ({ scrolled }) => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8">
-          {['Beranda', 'Tentang', 'Proyek', 'Kontak'].map((item, index) => (
-            <motion.a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="font-medium hover:text-[#00f7ff] transition-colors duration-300"
-              whileHover={{ y: -2 }}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.5 }}
-            >
-              {item}
-            </motion.a>
-          ))}
+          {['Beranda', 'Tentang', 'Proyek', 'Kontak'].map((item, index) => {
+            const sectionId = item.toLowerCase();
+            const isActive = activeSection === sectionId;
+            
+            return (
+              <motion.a
+                key={item}
+                href={`#${sectionId}`}
+                className={`font-medium transition-colors duration-300 relative ${
+                  isActive ? 'text-[#00f7ff]' : 'hover:text-[#00f7ff]'
+                }`}
+                whileHover={{ y: -2 }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.5 }}
+              >
+                {item}
+                {isActive && (
+                  <motion.div
+                    className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#00f7ff]"
+                    layoutId="navbar-indicator"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </motion.a>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Button */}
@@ -126,16 +204,23 @@ const Navbar = ({ scrolled }) => {
           transition={{ duration: 0.3 }}
         >
           <div className="px-4 py-4 space-y-4">
-            {['Beranda', 'Tentang', 'Proyek', 'Kontak'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="block font-medium hover:text-[#00f7ff] transition-colors duration-300 py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item}
-              </a>
-            ))}
+            {['Beranda', 'Tentang', 'Proyek', 'Kontak'].map((item) => {
+              const sectionId = item.toLowerCase();
+              const isActive = activeSection === sectionId;
+              
+              return (
+                <a
+                  key={item}
+                  href={`#${sectionId}`}
+                  className={`block font-medium transition-colors duration-300 py-2 ${
+                    isActive ? 'text-[#00f7ff]' : 'hover:text-[#00f7ff]'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item}
+                </a>
+              );
+            })}
           </div>
         </motion.div>
       )}
@@ -144,46 +229,85 @@ const Navbar = ({ scrolled }) => {
 };
 
 // Hero Section Component
-const HeroSection = () => (
-  <motion.section
-    className="min-h-screen flex flex-col items-center justify-center px-4 text-center"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8 }}
-  >
-    <motion.h1
-      className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#6a0dad] to-[#00f7ff]"
+const HeroSection = () => {
+  const [text, setText] = useState('');
+  const fullText = 'Backend Developer';
+
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < fullText.length) {
+        setText(fullText.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(timer);
+        // Reset animation after 2 seconds
+        setTimeout(() => {
+          setText('');
+          index = 0;
+        }, 2000);
+      }
+    }, 150);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <motion.section
+      className="min-h-screen flex flex-col items-center justify-center px-4 text-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2, duration: 0.8 }}
+      transition={{ duration: 0.8 }}
     >
-      Martio Husein Samsu
-    </motion.h1>
-    <motion.p
-      className="text-2xl md:text-3xl mb-4 font-semibold"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4, duration: 0.8 }}
-    >
-      Backend Developer
-    </motion.p>
-    <motion.p
-      className="text-xl md:text-2xl mb-10 max-w-2xl"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6, duration: 0.8 }}
-    >
-      Membangun sistem yang kuat dan skalabel dengan teknologi terkini
-    </motion.p>
-    <motion.button
-      className="px-8 py-3 bg-[#6a0dad] text-white font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      Lihat Proyek
-    </motion.button>
-  </motion.section>
-);
+      <motion.h1
+        className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#6a0dad] to-[#00f7ff]"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.8 }}
+      >
+        Martio Husein Samsu
+      </motion.h1>
+      <motion.p
+        className="text-2xl md:text-3xl mb-4 font-semibold min-h-[2.5rem]"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+      >
+        {text}
+        <span className="ml-1 inline-block w-1 h-8 bg-[#00f7ff] animate-pulse"></span>
+      </motion.p>
+      <motion.p
+        className="text-xl md:text-2xl mb-10 max-w-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.8 }}
+      >
+        Membangun sistem yang kuat dan skalabel dengan teknologi terkini
+      </motion.p>
+      <motion.div
+        className="flex flex-wrap justify-center gap-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.8 }}
+      >
+        <motion.button
+          className="px-8 py-3 bg-[#6a0dad] text-white font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Lihat Proyek
+        </motion.button>
+        <motion.button
+          className="px-8 py-3 bg-transparent border-2 border-[#00f7ff] text-[#00f7ff] font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Hubungi Saya
+        </motion.button>
+      </motion.div>
+    </motion.section>
+  );
+};
 
 // About Section Component
 const AboutSection = () => (
@@ -196,45 +320,69 @@ const AboutSection = () => (
   >
     <div className="max-w-6xl mx-auto">
       <h2 className="text-4xl font-bold mb-16 text-center">Tentang Saya</h2>
-      <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div className="grid md:grid-cols-3 gap-12 items-center">
+        {/* Foto Profil */}
         <motion.div
-          className="glass p-8 rounded-2xl"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          className="glass p-4 rounded-2xl flex justify-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold mb-4">Backend Developer</h3>
-          <p className="mb-4">
-            Saya adalah seorang backend developer dengan passion dalam membangun sistem yang kuat, aman, dan skalabel. 
-            Dengan keahlian dalam berbagai teknologi backend modern, saya berfokus pada pembuatan API yang efisien dan database yang teroptimasi.
-          </p>
-          <p>
-            Saya selalu berusaha untuk belajar hal-hal baru dan mengikuti perkembangan terkini dalam dunia backend development, 
-            termasuk arsitektur microservices, containerization, dan cloud computing.
-          </p>
-        </motion.div>
-        <motion.div
-          className="glass p-8 rounded-2xl h-full"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-2xl font-bold mb-4">Keahlian Teknis</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {['Node.js', 'Python', 'Java', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'AWS'].map((skill) => (
-              <div key={skill} className="flex items-center">
-                <div className="w-2 h-2 bg-[#00f7ff] rounded-full mr-2"></div>
-                <span>{skill}</span>
+          <div className="relative">
+            <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-[#6a0dad]">
+              {/* Placeholder untuk foto profil */}
+              <div className="w-full h-full bg-gradient-to-br from-[#6a0dad] to-[#00f7ff] flex items-center justify-center">
+                <span className="text-6xl text-white">M</span>
               </div>
-            ))}
-          </div>
-          <div className="mt-6 text-center">
-            <div className="text-5xl font-bold text-[#00f7ff] mb-2">3+</div>
-            <div className="text-xl">Tahun Pengalaman</div>
+            </div>
+            <div className="absolute inset-0 rounded-full border-2 border-[#00f7ff] animate-ping opacity-20"></div>
           </div>
         </motion.div>
+        
+        {/* Deskripsi dan Keahlian */}
+        <div className="md:col-span-2">
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div
+              className="glass p-8 rounded-2xl"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold mb-4">Backend Developer</h3>
+              <p className="mb-4">
+                Saya adalah seorang backend developer dengan passion dalam membangun sistem yang kuat, aman, dan skalabel. 
+                Dengan keahlian dalam berbagai teknologi backend modern, saya berfokus pada pembuatan API yang efisien dan database yang teroptimasi.
+              </p>
+              <p>
+                Saya selalu berusaha untuk belajar hal-hal baru dan mengikuti perkembangan terkini dalam dunia backend development, 
+                termasuk arsitektur microservices, containerization, dan cloud computing.
+              </p>
+            </motion.div>
+            <motion.div
+              className="glass p-8 rounded-2xl h-full"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold mb-4">Keahlian Teknis</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {['Node.js', 'Python', 'Java', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'AWS'].map((skill) => (
+                  <div key={skill} className="flex items-center">
+                    <div className="w-2 h-2 bg-[#00f7ff] rounded-full mr-2"></div>
+                    <span>{skill}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 text-center">
+                <div className="text-5xl font-bold text-[#00f7ff] mb-2">3+</div>
+                <div className="text-xl">Tahun Pengalaman</div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   </motion.section>
@@ -271,7 +419,7 @@ const ProjectsSection = () => (
         ].map((project, index) => (
           <motion.div
             key={project.title}
-            className="glass rounded-2xl overflow-hidden flex flex-col h-full"
+            className="glass rounded-2xl overflow-hidden flex flex-col h-full relative"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -280,6 +428,7 @@ const ProjectsSection = () => (
           >
             <div className="h-48 bg-gradient-to-r from-[#6a0dad] to-[#00f7ff] relative overflow-hidden">
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center opacity-30" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] to-transparent opacity-80"></div>
             </div>
             <div className="p-6 flex flex-col flex-grow">
               <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
@@ -289,16 +438,33 @@ const ProjectsSection = () => (
               <div className="mb-4">
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
-                    <span key={tech} className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm">
+                    <motion.span 
+                      key={tech} 
+                      className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm"
+                      whileHover={{ scale: 1.1, backgroundColor: '#00f7ff', color: '#0f0f1a' }}
+                    >
                       {tech}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </div>
-              <button className="text-[#00f7ff] font-semibold hover:underline mt-auto">
-                Lihat Detail →
-              </button>
+              <motion.button 
+                className="text-[#00f7ff] font-semibold hover:underline mt-auto flex items-center"
+                whileHover={{ x: 5 }}
+              >
+                Lihat Detail 
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </motion.button>
             </div>
+            
+            {/* Hover effect overlay */}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-br from-[#6a0dad]/20 to-[#00f7ff]/20 opacity-0 rounded-2xl"
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
           </motion.div>
         ))}
       </div>
