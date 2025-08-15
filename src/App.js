@@ -413,88 +413,180 @@ const AboutSection = () => (
 );
 
 // Projects Section Component
-const ProjectsSection = () => (
-  <motion.section
-    className="py-20 px-4 bg-gradient-to-b from-[#0f0f1a] to-[#1a1a2e]"
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true }}
-  >
-    <div className="max-w-6xl mx-auto">
-      <h2 className="text-4xl font-bold mb-16 text-center">Proyek Backend</h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[
-          {
-            title: "Sistem Manajemen API",
-            description: "Platform untuk mengelola dan memonitor API dengan rate limiting, autentikasi, dan analitik penggunaan.",
-            technologies: ["Node.js", "Express", "MongoDB", "Redis"]
-          },
-          {
-            title: "Aplikasi E-commerce Backend",
-            description: "Backend untuk toko online dengan fitur keranjang belanja, pembayaran, dan manajemen inventaris.",
-            technologies: ["Python", "Django", "PostgreSQL", "Docker"]
-          },
-          {
-            title: "Microservices Architecture",
-            description: "Arsitektur layanan terdistribusi untuk aplikasi skala besar dengan message queue dan load balancing.",
-            technologies: ["Java", "Spring Boot", "Kafka", "Kubernetes"]
-          }
-        ].map((project, index) => (
+const ProjectsSection = () => {
+  const [selectedProject, setSelectedProject] = useState(null);
+  
+  const projects = [
+    {
+      id: 1,
+      title: "Sistem Manajemen API",
+      description: "Platform untuk mengelola dan memonitor API dengan rate limiting, autentikasi, dan analitik penggunaan.",
+      technologies: ["Node.js", "Express", "MongoDB", "Redis"],
+      details: "Sistem ini memungkinkan developer untuk dengan mudah membuat, mengelola, dan memonitor API mereka. Dengan fitur rate limiting yang dapat dikonfigurasi, autentikasi JWT, dan dashboard analitik real-time, platform ini memberikan kontrol penuh atas API Anda. Sistem ini juga mendukung API gateway dengan load balancing dan failover untuk memastikan ketersediaan tinggi.",
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      id: 2,
+      title: "Aplikasi E-commerce Backend",
+      description: "Backend untuk toko online dengan fitur keranjang belanja, pembayaran, dan manajemen inventaris.",
+      technologies: ["Python", "Django", "PostgreSQL", "Docker"],
+      details: "Backend e-commerce yang kuat dengan fitur lengkap termasuk manajemen produk, keranjang belanja, sistem pembayaran terintegrasi, dan manajemen pesanan. Menggunakan Django REST Framework untuk API yang cepat dan aman, dengan PostgreSQL untuk database yang andal. Sistem ini juga dilengkapi dengan dashboard admin untuk manajemen inventaris dan analitik penjualan.",
+      image: "https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      id: 3,
+      title: "Microservices Architecture",
+      description: "Arsitektur layanan terdistribusi untuk aplikasi skala besar dengan message queue dan load balancing.",
+      technologies: ["Java", "Spring Boot", "Kafka", "Kubernetes"],
+      details: "Arsitektur microservices yang skalabel untuk aplikasi perusahaan dengan ribuan pengguna concurrent. Menggunakan Spring Boot untuk layanan individu, Apache Kafka untuk komunikasi antar layanan, dan Kubernetes untuk orkestrasi container. Sistem ini juga dilengkapi dengan service discovery, circuit breaker, dan monitoring real-time untuk memastikan ketersediaan dan performa optimal.",
+      image: "https://images.unsplash.com/photo-1558346490-a72e53ae6b91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+    }
+  ];
+
+  return (
+    <motion.section
+      className="py-20 px-4 bg-gradient-to-b from-[#0f0f1a] to-[#1a1a2e]"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+    >
+      <div className="max-w-6xl mx-auto">
+        <motion.h2 
+          className="text-4xl font-bold mb-16 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          Proyek Backend
+        </motion.h2>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              className="glass rounded-2xl overflow-hidden flex flex-col h-full relative cursor-pointer"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -10 }}
+              onClick={() => setSelectedProject(project)}
+            >
+              <div className="h-48 relative overflow-hidden">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-[#0f0f1a]/70 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#6a0dad]/80 to-[#00f7ff]/50 opacity-70"></div>
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
+                <p className="mb-4 flex-grow">
+                  {project.description}
+                </p>
+                <div className="mb-4">
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.slice(0, 3).map((tech) => (
+                      <motion.span 
+                        key={tech} 
+                        className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm"
+                        whileHover={{ scale: 1.1, backgroundColor: '#00f7ff', color: '#0f0f1a' }}
+                      >
+                        {tech}
+                      </motion.span>
+                    ))}
+                    {project.technologies.length > 3 && (
+                      <span className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm">
+                        +{project.technologies.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <motion.button 
+                  className="text-[#00f7ff] font-semibold hover:underline mt-auto flex items-center"
+                  whileHover={{ x: 5 }}
+                >
+                  Lihat Detail 
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.button>
+              </div>
+              
+              {/* Hover effect overlay */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-br from-[#6a0dad]/30 to-[#00f7ff]/30 opacity-0 rounded-2xl"
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Project Detail Modal */}
+      <AnimatePresence>
+        {selectedProject && (
           <motion.div
-            key={project.title}
-            className="glass rounded-2xl overflow-hidden flex flex-col h-full relative"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            whileHover={{ y: -10 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-lg z-50 flex items-center justify-center p-4 pt-20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
           >
-            <div className="h-48 bg-gradient-to-r from-[#6a0dad] to-[#00f7ff] relative overflow-hidden">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center opacity-30" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] to-transparent opacity-80"></div>
-            </div>
-            <div className="p-6 flex flex-col flex-grow">
-              <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
-              <p className="mb-4 flex-grow">
-                {project.description}
-              </p>
-              <div className="mb-4">
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
-                    <motion.span 
-                      key={tech} 
-                      className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm"
-                      whileHover={{ scale: 1.1, backgroundColor: '#00f7ff', color: '#0f0f1a' }}
-                    >
-                      {tech}
-                    </motion.span>
-                  ))}
+            <motion.div
+              className="glass rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto"
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 50 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative">
+                <img 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title} 
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] to-transparent"></div>
+                <button
+                  className="absolute top-4 right-4 text-white bg-[#1a1a2e]/50 rounded-full p-2 hover:bg-[#6a0dad] transition-colors"
+                  onClick={() => setSelectedProject(null)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="p-8">
+                <h3 className="text-3xl font-bold mb-4">{selectedProject.title}</h3>
+                <p className="text-lg mb-6">{selectedProject.details}</p>
+                <div className="mb-6">
+                  <h4 className="text-xl font-semibold mb-3">Teknologi yang Digunakan:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProject.technologies.map((tech) => (
+                      <span key={tech} className="px-4 py-2 bg-[#1a1a2e] text-[#00f7ff] rounded-full">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <button className="px-6 py-3 bg-[#6a0dad] text-white font-semibold rounded-lg shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300">
+                    Lihat Source Code
+                  </button>
                 </div>
               </div>
-              <motion.button 
-                className="text-[#00f7ff] font-semibold hover:underline mt-auto flex items-center"
-                whileHover={{ x: 5 }}
-              >
-                Lihat Detail 
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </motion.button>
-            </div>
-            
-            {/* Hover effect overlay */}
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-br from-[#6a0dad]/20 to-[#00f7ff]/20 opacity-0 rounded-2xl"
-              whileHover={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            />
+            </motion.div>
           </motion.div>
-        ))}
-      </div>
-    </div>
-  </motion.section>
-);
+        )}
+      </AnimatePresence>
+    </motion.section>
+  );
+};
 
 // Contact Section Component
 const ContactSection = () => (
