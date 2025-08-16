@@ -322,6 +322,9 @@ const HeroSection = () => {
           className="px-8 py-3 bg-[#6a0dad] text-white font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0, duration: 0.5 }}
         >
           Lihat Proyek
         </motion.button>
@@ -329,6 +332,9 @@ const HeroSection = () => {
           className="px-8 py-3 bg-transparent border-2 border-[#00f7ff] text-[#00f7ff] font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.5 }}
         >
           Hubungi Saya
         </motion.button>
@@ -344,17 +350,25 @@ const AboutSection = () => (
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
     transition={{ duration: 0.8 }}
-    viewport={{ once: true }}
+    viewport={{ once: true, margin: "-100px" }}
   >
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-4xl font-bold mb-16 text-center">Tentang Saya</h2>
+      <motion.h2 
+        className="text-4xl font-bold mb-16 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+      >
+        Tentang Saya
+      </motion.h2>
       <div className="grid md:grid-cols-3 gap-12 items-center">
         {/* Foto Profil */}
         <motion.div
           className="glass p-4 rounded-2xl flex justify-center"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
           <div className="relative">
@@ -372,7 +386,7 @@ const AboutSection = () => (
               className="glass p-8 rounded-2xl"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
               viewport={{ once: true }}
             >
               <h3 className="text-2xl font-bold mb-4">Backend Developer</h3>
@@ -389,22 +403,35 @@ const AboutSection = () => (
               className="glass p-8 rounded-2xl h-full"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
               <h3 className="text-2xl font-bold mb-4">Keahlian Teknis</h3>
               <div className="grid grid-cols-2 gap-4">
-                {['Node.js', 'NestJS', 'Laravel', 'Express', 'Python', 'Java', 'Javascript', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'GCP'].map((skill) => (
-                  <div key={skill} className="flex items-center">
+                {['Node.js', 'NestJS', 'Laravel', 'Express', 'Python', 'Java', 'Javascript', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'GCP'].map((skill, index) => (
+                  <motion.div 
+                    key={skill} 
+                    className="flex items-center"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
                     <div className="w-2 h-2 bg-[#00f7ff] rounded-full mr-2"></div>
                     <span>{skill}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-              <div className="mt-6 text-center">
+              <motion.div 
+                className="mt-6 text-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                viewport={{ once: true }}
+              >
                 <div className="text-5xl font-bold text-[#00f7ff] mb-2">4+</div>
                 <div className="text-xl">Tahun Pengalaman</div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -450,7 +477,7 @@ const ProjectsSection = () => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-100px" }}
     >
       <div className="max-w-6xl mx-auto">
         <motion.h2 
@@ -485,16 +512,34 @@ const ProjectsSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#6a0dad]/80 to-[#00f7ff]/50 opacity-70"></div>
               </div>
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
-                <p className="mb-4 flex-grow">
+                <motion.h3 
+                  className="text-2xl font-bold mb-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 + 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  {project.title}
+                </motion.h3>
+                <motion.p 
+                  className="mb-4 flex-grow"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
+                  viewport={{ once: true }}
+                >
                   {project.description}
-                </p>
+                </motion.p>
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies.slice(0, 3).map((tech) => (
+                    {project.technologies.slice(0, 3).map((tech, techIndex) => (
                       <motion.span 
                         key={tech} 
                         className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: index * 0.1 + techIndex * 0.05 + 0.3 }}
+                        viewport={{ once: true }}
                         whileHover={{ scale: 1.1, backgroundColor: '#00f7ff', color: '#0f0f1a' }}
                       >
                         {tech}
@@ -509,6 +554,10 @@ const ProjectsSection = () => {
                 </div>
                 <motion.button 
                   className="text-[#00f7ff] font-semibold hover:underline mt-auto flex items-center"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 + 0.5 }}
+                  viewport={{ once: true }}
                   whileHover={{ x: 5 }}
                 >
                   Lihat Detail 
@@ -563,23 +612,53 @@ const ProjectsSection = () => {
                 </button>
               </div>
               <div className="p-8">
-                <h3 className="text-3xl font-bold mb-4">{selectedProject.title}</h3>
-                <p className="text-lg mb-6">{selectedProject.details}</p>
-                <div className="mb-6">
+                <motion.h3 
+                  className="text-3xl font-bold mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {selectedProject.title}
+                </motion.h3>
+                <motion.p 
+                  className="text-lg mb-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                >
+                  {selectedProject.details}
+                </motion.p>
+                <motion.div 
+                  className="mb-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                >
                   <h4 className="text-xl font-semibold mb-3">Teknologi yang Digunakan:</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedProject.technologies.map((tech) => (
-                      <span key={tech} className="px-4 py-2 bg-[#1a1a2e] text-[#00f7ff] rounded-full">
+                    {selectedProject.technologies.map((tech, index) => (
+                      <motion.span 
+                        key={tech} 
+                        className="px-4 py-2 bg-[#1a1a2e] text-[#00f7ff] rounded-full"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: index * 0.1 }}
+                      >
                         {tech}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
-                </div>
-                <div className="flex justify-end">
+                </motion.div>
+                <motion.div 
+                  className="flex justify-end"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
+                >
                   <button className="px-6 py-3 bg-[#6a0dad] text-white font-semibold rounded-lg shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300">
                     Lihat Source Code
                   </button>
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           </motion.div>
@@ -596,123 +675,162 @@ const ContactSection = () => (
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
     transition={{ duration: 0.8 }}
-    viewport={{ once: true }}
+    viewport={{ once: true, margin: "-100px" }}
   >
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-4xl font-bold mb-16 text-center">Hubungi Saya</h2>
+      <motion.h2 
+        className="text-4xl font-bold mb-16 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+      >
+        Hubungi Saya
+      </motion.h2>
       <div className="grid md:grid-cols-2 gap-12">
         <motion.div
           className="glass p-8 rounded-2xl"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold mb-6">Informasi Kontak</h3>
+          <motion.h3 
+            className="text-2xl font-bold mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            viewport={{ once: true }}
+          >
+            Informasi Kontak
+          </motion.h3>
           <div className="space-y-4">
-            <div className="flex items-start">
-              <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold">Email</h4>
-                <p>martiohusein27n@gmail.com</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold">Lokasi</h4>
-                <p>Banyuwangi, Indonesia</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold">GitHub</h4>
-                <p>github.com/martiohusein</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold">LinkedIn</h4>
-                <a
-                  href="https://www.linkedin.com/in/martio-husein-samsu/"
-                  className="text-[#00f7ff] hover:underline"
-                >
-                  https://www.linkedin.com/in/martio-husein-samsu/
-                </a>
-              </div>
-            </div>
+            {[
+              { 
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                ),
+                title: "Email",
+                content: "martiohusein27n@gmail.com"
+              },
+              { 
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                ),
+                title: "Lokasi",
+                content: "Banyuwangi, Indonesia"
+              },
+              { 
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                    />
+                  </svg>
+                ),
+                title: "GitHub",
+                content: "github.com/martiohusein"
+              },
+              { 
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                ),
+                title: "LinkedIn",
+                content: (
+                  <a
+                    href="https://www.linkedin.com/in/martio-husein-samsu/"
+                    className="text-[#00f7ff] hover:underline"
+                  >
+                    https://www.linkedin.com/in/martio-husein-samsu/
+                  </a>
+                )
+              }
+            ].map((item, index) => (
+              <motion.div 
+                className="flex items-start"
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="mt-1 mr-4 text-[#00f7ff]">
+                  {item.icon}
+                </div>
+                <div>
+                  <h4 className="font-semibold">{item.title}</h4>
+                  <p>{item.content}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="mt-8">
+          <motion.div 
+            className="mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            viewport={{ once: true }}
+          >
             <h4 className="font-semibold mb-4">Koneksi Sosial</h4>
             <div className="flex space-x-4">
-              {["github", "linkedin", "twitter"].map((social) => (
+              {["github", "linkedin", "twitter"].map((social, index) => (
                 <motion.a
                   key={social}
                   href="#"
                   className="w-12 h-12 rounded-full bg-[#1a1a2e] flex items-center justify-center hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.8 + index * 0.1 }}
+                  viewport={{ once: true }}
                   whileHover={{ y: -5 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -720,41 +838,54 @@ const ContactSection = () => (
                 </motion.a>
               ))}
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.div
           className="glass p-8 rounded-2xl"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold mb-6">Kirim Pesan</h3>
+          <motion.h3 
+            className="text-2xl font-bold mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            viewport={{ once: true }}
+          >
+            Kirim Pesan
+          </motion.h3>
           <form className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block mb-2 font-medium">
-                Nama
-              </label>
-              <input
-                type="text"
-                id="name"
-                className="w-full px-4 py-3 bg-[#1a1a2e] border border-[#2d2d44] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f7ff]"
-                placeholder="Nama Anda"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block mb-2 font-medium">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="w-full px-4 py-3 bg-[#1a1a2e] border border-[#2d2d44] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f7ff]"
-                placeholder="email@contoh.com"
-              />
-            </div>
-            <div>
+            {[
+              { id: "name", label: "Nama", type: "text", placeholder: "Nama Anda" },
+              { id: "email", label: "Email", type: "email", placeholder: "email@contoh.com" }
+            ].map((field, index) => (
+              <motion.div
+                key={field.id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <label htmlFor={field.id} className="block mb-2 font-medium">
+                  {field.label}
+                </label>
+                <input
+                  type={field.type}
+                  id={field.id}
+                  className="w-full px-4 py-3 bg-[#1a1a2e] border border-[#2d2d44] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f7ff]"
+                  placeholder={field.placeholder}
+                />
+              </motion.div>
+            ))}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
               <label htmlFor="message" className="block mb-2 font-medium">
                 Pesan
               </label>
@@ -764,10 +895,14 @@ const ContactSection = () => (
                 className="w-full px-4 py-3 bg-[#1a1a2e] border border-[#2d2d44] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f7ff]"
                 placeholder="Pesan Anda..."
               ></textarea>
-            </div>
+            </motion.div>
             <motion.button
               type="submit"
               className="w-full px-6 py-3 bg-[#6a0dad] text-white font-semibold rounded-lg shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.6 }}
+              viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -782,33 +917,61 @@ const ContactSection = () => (
 
 // Footer Component
 const Footer = () => (
-  <footer className="py-10 px-4 border-t border-[#2d2d44]">
+  <motion.footer 
+    className="py-10 px-4 border-t border-[#2d2d44]"
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+    viewport={{ once: true, margin: "-100px" }}
+  >
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-6 md:mb-0">
+        <motion.div 
+          className="mb-6 md:mb-0"
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
           <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#6a0dad] to-[#00f7ff]">
             Martio Husein Samsu
           </div>
           <p className="mt-2 text-[#a0a0c0]">Backend Developer</p>
-        </div>
-        <div className="flex space-x-6">
-          {['github', 'linkedin', 'twitter', 'email'].map((social) => (
+        </motion.div>
+        <motion.div 
+          className="flex space-x-6"
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          {['github', 'linkedin', 'twitter', 'email'].map((social, index) => (
             <motion.a
               key={social}
               href="#"
               className="text-[#a0a0c0] hover:text-[#00f7ff] transition-colors duration-300"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
+              viewport={{ once: true }}
               whileHover={{ y: -3 }}
             >
               <div className="w-6 h-6 bg-gray-400 rounded-full"></div>
             </motion.a>
           ))}
-        </div>
+        </motion.div>
       </div>
-      <div className="mt-8 pt-8 border-t border-[#2d2d44] text-center text-[#a0a0c0]">
+      <motion.div 
+        className="mt-8 pt-8 border-t border-[#2d2d44] text-center text-[#a0a0c0]"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        viewport={{ once: true }}
+      >
         <p>© {new Date().getFullYear()} Martio Husein Samsu. Hak Cipta Dilindungi.</p>
-      </div>
+      </motion.div>
     </div>
-  </footer>
+  </motion.footer>
 );
 
 export default App;
