@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/react-portofolio-app/static/css/main.39d1a837.css",
+    "main.js": "/react-portofolio-app/static/js/main.461c17f8.js",
+    "static/js/453.f81f80e4.chunk.js": "/react-portofolio-app/static/js/453.f81f80e4.chunk.js",
+    "static/media/Sistem-Informasi.png": "/react-portofolio-app/static/media/Sistem-Informasi.9e7b9015fc9b6525c247.png",
+    "static/media/Gethub.png": "/react-portofolio-app/static/media/Gethub.0d0c800b089e8e726204.png",
+    "static/media/profil.png": "/react-portofolio-app/static/media/profil.8ab3e370ff862f9dd869.png",
+    "static/media/Puspadaya.png": "/react-portofolio-app/static/media/Puspadaya.faf4cd83f88400ba2c83.png",
+    "index.html": "/react-portofolio-app/index.html",
+    "main.39d1a837.css.map": "/react-portofolio-app/static/css/main.39d1a837.css.map",
+    "main.461c17f8.js.map": "/react-portofolio-app/static/js/main.461c17f8.js.map",
+    "453.f81f80e4.chunk.js.map": "/react-portofolio-app/static/js/453.f81f80e4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.39d1a837.css",
+    "static/js/main.461c17f8.js"
+  ]
+}
