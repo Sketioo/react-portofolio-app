@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Puspadaya from './images/Puspadaya.png';
+import GetHub from './images/Gethub.png';
+import SistemInformasi from './images/Sistem-Informasi.png';
+import profil from './images/profil.png';
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -354,11 +358,8 @@ const AboutSection = () => (
           viewport={{ once: true }}
         >
           <div className="relative">
-            <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-[#6a0dad]">
-              {/* Placeholder untuk foto profil */}
-              <div className="w-full h-full bg-gradient-to-br from-[#6a0dad] to-[#00f7ff] flex items-center justify-center">
-                <span className="text-6xl text-white">M</span>
-              </div>
+            <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-[#6a0dad] bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a]">
+              <img src={profil} alt="Profil" className="w-full h-full object-contain" />
             </div>
             <div className="absolute inset-0 rounded-full border-2 border-[#00f7ff] animate-ping opacity-20"></div>
           </div>
@@ -419,27 +420,27 @@ const ProjectsSection = () => {
   const projects = [
     {
       id: 1,
-      title: "Sistem Manajemen API",
-      description: "Platform untuk mengelola dan memonitor API dengan rate limiting, autentikasi, dan analitik penggunaan.",
-      technologies: ["Node.js", "Express", "MongoDB", "Redis"],
-      details: "Sistem ini memungkinkan developer untuk dengan mudah membuat, mengelola, dan memonitor API mereka. Dengan fitur rate limiting yang dapat dikonfigurasi, autentikasi JWT, dan dashboard analitik real-time, platform ini memberikan kontrol penuh atas API Anda. Sistem ini juga mendukung API gateway dengan load balancing dan failover untuk memastikan ketersediaan tinggi.",
-      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      title: "Puspadaya",
+      description: "Puspadaya dirancang untuk membantu deteksi dini stunting pada anak serta pemantauan kehamilan ibu agar penanganan dapat dilakukan lebih cepat dan tepat.",
+      technologies: ["Typescript", "MySQL", "NestJS"],
+      details: "Aplikasi Puspadaya merupakan solusi digital inovatif yang dirancang untuk mengatasi dua isu kesehatan krusial: stunting pada anak dan kesehatan ibu hamil. Dengan sistem deteksi dini, aplikasi ini memungkinkan pemantauan pertumbuhan anak secara berkala, memberikan notifikasi dan rekomendasi kepada orang tua serta tenaga kesehatan jika teridentifikasi adanya risiko stunting. Selain itu, fitur pemantauan kehamilan membantu ibu hamil dalam mencatat kondisi kesehatan, jadwal pemeriksaan, dan mendapatkan informasi penting seputar kehamilan. Dengan demikian, Puspadaya berperan sebagai asisten kesehatan digital yang proaktif, memastikan penanganan yang lebih cepat dan tepat untuk ibu dan anak, serta mendukung upaya pemerintah dalam menurunkan angka stunting.",
+      image: Puspadaya
     },
     {
       id: 2,
-      title: "Aplikasi E-commerce Backend",
-      description: "Backend untuk toko online dengan fitur keranjang belanja, pembayaran, dan manajemen inventaris.",
-      technologies: ["Python", "Django", "PostgreSQL", "Docker"],
-      details: "Backend e-commerce yang kuat dengan fitur lengkap termasuk manajemen produk, keranjang belanja, sistem pembayaran terintegrasi, dan manajemen pesanan. Menggunakan Django REST Framework untuk API yang cepat dan aman, dengan PostgreSQL untuk database yang andal. Sistem ini juga dilengkapi dengan dashboard admin untuk manajemen inventaris dan analitik penjualan.",
-      image: "https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      title: "GetHub",
+      description: "GetHub hadir sebagai platform pencarian talent digital berbasis AI yang mampu merekomendasikan kandidat sesuai kebutuhan perusahaan melalui analisis keahlian dan pengalaman.",
+      technologies: ["typescript", "Node.js", "Express", "MongoDB"],
+      details: "GetHub merevolusi proses rekrutmen talenta digital dengan memanfaatkan kekuatan kecerdasan buatan (AI). Platform ini tidak hanya berfungsi sebagai database talenta, tetapi juga sebagai sistem pencocokan cerdas yang mampu menganalisis secara mendalam keahlian, pengalaman, dan portofolio kandidat. Algoritma AI pada GetHub dapat memahami kebutuhan spesifik perusahaan dan merekomendasikan kandidat yang paling sesuai, tidak hanya berdasarkan kata kunci, tetapi juga berdasarkan potensi dan kesesuaian budaya. Hal ini secara signifikan mempersingkat waktu rekrutmen, mengurangi bias, dan meningkatkan kemungkinan menemukan talenta yang benar-benar tepat untuk mendorong inovasi di perusahaan.",
+      image: GetHub
     },
     {
       id: 3,
-      title: "Microservices Architecture",
-      description: "Arsitektur layanan terdistribusi untuk aplikasi skala besar dengan message queue dan load balancing.",
-      technologies: ["Java", "Spring Boot", "Kafka", "Kubernetes"],
-      details: "Arsitektur microservices yang skalabel untuk aplikasi perusahaan dengan ribuan pengguna concurrent. Menggunakan Spring Boot untuk layanan individu, Apache Kafka untuk komunikasi antar layanan, dan Kubernetes untuk orkestrasi container. Sistem ini juga dilengkapi dengan service discovery, circuit breaker, dan monitoring real-time untuk memastikan ketersediaan dan performa optimal.",
-      image: "https://images.unsplash.com/photo-1558346490-a72e53ae6b91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      title: "Sistem Informasi Layanan Program Studi",
+      description: "Sistem Informasi Layanan Program Studi TRPL Poliwangi dibangun untuk meningkatkan efektivitas pengelolaan data, layanan akademik, dan informasi program studi, sehingga dapat mendukung transparansi dan kualitas layanan pendidikan",
+      technologies: ["PHP","Laravel", "MySQL", "Bootstrap"],
+      details: "Sistem Informasi Layanan Program Studi Teknologi Rekayasa Perangkat Lunak (TRPL) di Poliwangi adalah platform terintegrasi yang dibangun untuk mentransformasi administrasi akademik. Sistem ini secara komprehensif mengelola berbagai aspek, mulai dari data mahasiswa, jadwal perkuliahan, hingga penilaian dan transkrip nilai. Dengan adanya sistem ini, layanan akademik menjadi lebih efisien, transparan, dan mudah diakses oleh mahasiswa maupun dosen. Mahasiswa dapat dengan mudah melihat informasi akademik mereka, sementara dosen dapat mengelola materi perkuliahan dan nilai dengan lebih terstruktur. Pada akhirnya, sistem ini tidak hanya meningkatkan efektivitas operasional program studi, tetapi juga mendukung peningkatan kualitas layanan pendidikan dan transparansi informasi kepada seluruh pemangku kepentingan.",
+      image: SistemInformasi
     }
   ];
 
@@ -611,31 +612,69 @@ const ContactSection = () => (
           <div className="space-y-4">
             <div className="flex items-start">
               <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
               </div>
               <div>
                 <h4 className="font-semibold">Email</h4>
-                <p>martio.husein@example.com</p>
+                <p>martiohusein27n@gmail.com</p>
               </div>
             </div>
             <div className="flex items-start">
               <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
                 </svg>
               </div>
               <div>
                 <h4 className="font-semibold">Lokasi</h4>
-                <p>Jakarta, Indonesia</p>
+                <p>Banyuwangi, Indonesia</p>
               </div>
             </div>
             <div className="flex items-start">
               <div className="mt-1 mr-4 text-[#00f7ff]">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                  />
                 </svg>
               </div>
               <div>
@@ -643,12 +682,33 @@ const ContactSection = () => (
                 <p>github.com/martiohusein</p>
               </div>
             </div>
+            <div className="flex items-start">
+              <div className="mt-1 mr-4 text-[#00f7ff]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="font-semibold">LinkedIn</h4>
+                <a
+                  href="https://www.linkedin.com/in/martio-husein-samsu/"
+                  className="text-[#00f7ff] hover:underline"
+                >
+                  https://www.linkedin.com/in/martio-husein-samsu/
+                </a>
+              </div>
+            </div>
           </div>
-          
+
           <div className="mt-8">
             <h4 className="font-semibold mb-4">Koneksi Sosial</h4>
             <div className="flex space-x-4">
-              {['github', 'linkedin', 'twitter'].map((social) => (
+              {["github", "linkedin", "twitter"].map((social) => (
                 <motion.a
                   key={social}
                   href="#"
@@ -662,7 +722,7 @@ const ContactSection = () => (
             </div>
           </div>
         </motion.div>
-        
+
         <motion.div
           className="glass p-8 rounded-2xl"
           initial={{ opacity: 0, x: 50 }}
@@ -673,7 +733,9 @@ const ContactSection = () => (
           <h3 className="text-2xl font-bold mb-6">Kirim Pesan</h3>
           <form className="space-y-6">
             <div>
-              <label htmlFor="name" className="block mb-2 font-medium">Nama</label>
+              <label htmlFor="name" className="block mb-2 font-medium">
+                Nama
+              </label>
               <input
                 type="text"
                 id="name"
@@ -682,7 +744,9 @@ const ContactSection = () => (
               />
             </div>
             <div>
-              <label htmlFor="email" className="block mb-2 font-medium">Email</label>
+              <label htmlFor="email" className="block mb-2 font-medium">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -691,7 +755,9 @@ const ContactSection = () => (
               />
             </div>
             <div>
-              <label htmlFor="message" className="block mb-2 font-medium">Pesan</label>
+              <label htmlFor="message" className="block mb-2 font-medium">
+                Pesan
+              </label>
               <textarea
                 id="message"
                 rows="5"
