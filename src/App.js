@@ -393,7 +393,7 @@ const AboutSection = () => (
             >
               <h3 className="text-2xl font-bold mb-4">Keahlian Teknis</h3>
               <div className="grid grid-cols-2 gap-4">
-                {['Node.js', 'Python', 'Java', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'AWS'].map((skill) => (
+                {['Node.js', 'NestJS', 'Laravel', 'Express', 'Python', 'Java', 'Javascript', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'GCP'].map((skill) => (
                   <div key={skill} className="flex items-center">
                     <div className="w-2 h-2 bg-[#00f7ff] rounded-full mr-2"></div>
                     <span>{skill}</span>
@@ -401,7 +401,7 @@ const AboutSection = () => (
                 ))}
               </div>
               <div className="mt-6 text-center">
-                <div className="text-5xl font-bold text-[#00f7ff] mb-2">3+</div>
+                <div className="text-5xl font-bold text-[#00f7ff] mb-2">4+</div>
                 <div className="text-xl">Tahun Pengalaman</div>
               </div>
             </motion.div>
