@@ -724,7 +724,7 @@ const ContactSection = () => (
                   </svg>
                 ),
                 title: "Email",
-                content: "martiohusein27n@gmail.com"
+                content: "martiohusein27@gmail.com"
               },
               { 
                 icon: (
