@@ -1,977 +1,764 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Puspadaya from './images/Puspadaya.png';
 import GetHub from './images/Gethub.png';
 import SistemInformasi from './images/Sistem-Informasi.png';
 import profil from './images/profil.png';
 
+const NAV_ITEMS = [
+  { id: 'beranda', label: 'Beranda' },
+  { id: 'tentang', label: 'Tentang' },
+  { id: 'proyek', label: 'Proyek' },
+  { id: 'kontak', label: 'Kontak' },
+];
+
+const TECH_STACK = [
+  'Node.js',
+  'NestJS',
+  'Laravel',
+  'Express',
+  'Python',
+  'Java',
+  'JavaScript',
+  'PostgreSQL',
+  'MongoDB',
+  'Redis',
+  'Docker',
+  'GCP',
+];
+
+const PROJECTS = [
+  {
+    id: 1,
+    title: 'Puspadaya',
+    year: '2025',
+    summary:
+      'Platform kesehatan ibu dan anak dengan deteksi dini risiko stunting dan pemantauan kehamilan terintegrasi.',
+    details:
+      'Aplikasi Puspadaya berfokus pada dua misi utama: monitoring tumbuh kembang anak dan kesehatan ibu hamil. Sistem ini membantu tenaga kesehatan memantau indikator penting, mengirim notifikasi berbasis risiko, dan mempercepat keputusan intervensi agar penanganan bisa dilakukan lebih awal.',
+    impact: 'Mempercepat proses identifikasi risiko kesehatan keluarga melalui monitoring berkala dan notifikasi proaktif.',
+    technologies: ['TypeScript', 'NestJS', 'MySQL'],
+    image: Puspadaya,
+  },
+  {
+    id: 2,
+    title: 'GetHub',
+    year: '2024',
+    summary:
+      'Platform pencarian talenta digital berbasis AI untuk merekomendasikan kandidat paling relevan sesuai kebutuhan perusahaan.',
+    details:
+      'GetHub mengoptimalkan proses hiring dengan mesin rekomendasi AI yang menilai skill, pengalaman, dan kecocokan kandidat terhadap kebutuhan tim. Pendekatan ini membantu tim rekrutmen bergerak lebih cepat, lebih akurat, dan mengurangi bias seleksi berbasis kata kunci semata.',
+    impact: 'Memotong waktu screening kandidat dan meningkatkan kualitas short-list rekrutmen teknis.',
+    technologies: ['TypeScript', 'Node.js', 'Express', 'MongoDB'],
+    image: GetHub,
+  },
+  {
+    id: 3,
+    title: 'Sistem Informasi Layanan Program Studi',
+    year: '2023',
+    summary:
+      'Platform administrasi akademik terpusat untuk layanan data, jadwal, nilai, dan informasi program studi TRPL Poliwangi.',
+    details:
+      'Sistem ini dibangun untuk menyederhanakan proses layanan akademik agar mahasiswa dan dosen mendapatkan akses informasi yang lebih cepat, transparan, dan terstruktur. Pengelolaan data akademik menjadi lebih efisien sekaligus mengurangi proses manual yang berulang.',
+    impact: 'Meningkatkan transparansi layanan akademik dan efisiensi operasional program studi.',
+    technologies: ['PHP', 'Laravel', 'MySQL', 'Bootstrap'],
+    image: SistemInformasi,
+  },
+];
+
+const SOCIALS = [
+  {
+    name: 'GitHub',
+    href: 'https://github.com/martiohusein',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+        <path d="M12 .5a12 12 0 00-3.79 23.39c.6.1.82-.26.82-.58v-2.23c-3.34.72-4.04-1.41-4.04-1.41-.55-1.4-1.34-1.77-1.34-1.77-1.1-.74.08-.73.08-.73 1.21.09 1.84 1.25 1.84 1.25 1.08 1.84 2.83 1.31 3.52 1 .1-.79.42-1.31.76-1.61-2.67-.31-5.47-1.33-5.47-5.92 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.56.12-3.25 0 0 1-.32 3.3 1.23a11.52 11.52 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.69.24 2.94.12 3.25.77.84 1.24 1.91 1.24 3.22 0 4.6-2.8 5.61-5.48 5.91.43.37.81 1.11.81 2.24v3.33c0 .32.22.69.83.58A12 12 0 0012 .5z" />
+      </svg>
+    ),
+  },
+  {
+    name: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/martio-husein-samsu/',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+        <path d="M19 0H5C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.46a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM20.45 20.45h-3.56v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.67H9.33V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29z" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Email',
+    href: 'mailto:martiohusein27@gmail.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 6.75h18v10.5H3V6.75z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 7.5L12 13.5l8.25-6" />
+      </svg>
+    ),
+  },
+];
+
 function App() {
+  const shouldReduceMotion = useReducedMotion();
+  const [activeSection, setActiveSection] = useState('beranda');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-[#0f0f1a] text-[#e0e0ff]">
-      {/* Navbar */}
-      <Navbar scrolled={scrolled} />
-      
-      {/* Animated background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#6a0dad] opacity-20 blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -100, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#00f7ff] opacity-10 blur-3xl"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 100, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        />
-      </div>
-      
-      {/* Animated particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-[#6a0dad]"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              opacity: 0,
-              scale: 0.5,
-            }}
-            animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              opacity: [0, 0.5, 0],
-              scale: [0.5, 1.5, 0.5],
-            }}
-            transition={{
-              duration: 10 + Math.random() * 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            style={{
-              width: Math.random() * 10 + 2,
-              height: Math.random() * 10 + 2,
-            }}
-          />
-        ))}
-      </div>
-
-      <main className="relative z-10 pt-16">
-        <div id="beranda">
-          <HeroSection />
-        </div>
-        <div id="tentang">
-          <AboutSection />
-        </div>
-        <div id="proyek">
-          <ProjectsSection />
-        </div>
-        <div id="kontak">
-          <ContactSection />
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
-  );
-}
-
-// Navbar Component
-const Navbar = ({ scrolled }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('beranda');
+  const sectionIds = useMemo(() => NAV_ITEMS.map((item) => item.id), []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['beranda', 'tentang', 'proyek', 'kontak'];
-      const scrollPosition = window.scrollY + 100;
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 20);
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const height = element.offsetHeight;
-          
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
-            setActiveSection(section);
-            break;
-          }
+      const checkpoint = scrollY + window.innerHeight * 0.3;
+      for (const id of sectionIds) {
+        const element = document.getElementById(id);
+        if (!element) continue;
+        const top = element.offsetTop;
+        const bottom = top + element.offsetHeight;
+        if (checkpoint >= top && checkpoint < bottom) {
+          setActiveSection(id);
+          break;
         }
       }
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [sectionIds]);
+
+  const scrollTo = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsMenuOpen(false);
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
-    <motion.nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#0f0f1a]/80 backdrop-blur-md py-2' : 'bg-transparent py-4'
-      }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
-        <motion.div
-          className="text-2xl font-bold"
-          whileHover={{ scale: 1.05 }}
-        >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#6a0dad] to-[#00f7ff]">
-            Martio Husein Samsu
-          </span>
-        </motion.div>
+    <div className="relative min-h-screen overflow-hidden bg-zinc-50 text-zinc-950">
+      <BackgroundDecor shouldReduceMotion={shouldReduceMotion} />
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8">
-          {['Beranda', 'Tentang', 'Proyek', 'Kontak'].map((item, index) => {
-            const sectionId = item.toLowerCase();
-            const isActive = activeSection === sectionId;
-            
+      <Navbar
+        activeSection={activeSection}
+        isMenuOpen={isMenuOpen}
+        scrolled={scrolled}
+        setIsMenuOpen={setIsMenuOpen}
+        scrollTo={scrollTo}
+      />
+
+      <main className="relative z-10">
+        <section id="beranda" className="px-4 pb-24 pt-28 sm:px-6 lg:px-10">
+          <HeroSection fadeInUp={fadeInUp} scrollTo={scrollTo} shouldReduceMotion={shouldReduceMotion} />
+        </section>
+
+        <section id="tentang" className="px-4 py-24 sm:px-6 lg:px-10">
+          <AboutSection fadeInUp={fadeInUp} shouldReduceMotion={shouldReduceMotion} />
+        </section>
+
+        <section id="proyek" className="px-4 py-24 sm:px-6 lg:px-10">
+          <ProjectsSection
+            fadeInUp={fadeInUp}
+            setSelectedProject={setSelectedProject}
+            shouldReduceMotion={shouldReduceMotion}
+          />
+        </section>
+
+        <section id="kontak" className="px-4 py-24 sm:px-6 lg:px-10">
+          <ContactSection fadeInUp={fadeInUp} shouldReduceMotion={shouldReduceMotion} />
+        </section>
+      </main>
+
+      <Footer />
+
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            shouldReduceMotion={shouldReduceMotion}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function Navbar({ activeSection, isMenuOpen, scrolled, setIsMenuOpen, scrollTo }) {
+  return (
+    <motion.header
+      className="fixed left-0 right-0 top-0 z-50 px-3 py-3 sm:px-6"
+      initial={{ y: -90, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div
+        className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-6 ${
+          scrolled
+            ? 'border-zinc-200 bg-white/95 shadow-[0_12px_40px_rgba(24,24,27,0.12)] backdrop-blur'
+            : 'border-zinc-200/70 bg-white/80 backdrop-blur'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => scrollTo('beranda')}
+          className="group cursor-pointer text-left"
+          aria-label="Ke beranda"
+        >
+          <div className="display-font text-lg font-semibold tracking-tight text-zinc-950 sm:text-xl">Martio Husein</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-zinc-500 transition group-hover:text-blue-600">Backend Engineer</div>
+        </button>
+
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
+          {NAV_ITEMS.map((item) => {
+            const active = activeSection === item.id;
             return (
-              <motion.a
-                key={item}
-                href={`#${sectionId}`}
-                className={`font-medium transition-colors duration-300 relative ${
-                  isActive ? 'text-[#00f7ff]' : 'hover:text-[#00f7ff]'
+              <button
+                type="button"
+                key={item.id}
+                onClick={() => scrollTo(item.id)}
+                className={`relative cursor-pointer rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                  active ? 'text-zinc-950' : 'text-zinc-500 hover:text-zinc-950'
                 }`}
-                whileHover={{ y: -2 }}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 + 0.5 }}
               >
-                {item}
-                {isActive && (
-                  <motion.div
-                    className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#00f7ff]"
-                    layoutId="navbar-indicator"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                {item.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 -z-10 rounded-xl bg-zinc-100"
+                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                   />
                 )}
-              </motion.a>
+              </button>
             );
           })}
-        </div>
+        </nav>
 
-        {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-[#e0e0ff] focus:outline-none"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          type="button"
+          className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-zinc-200 text-zinc-700 transition hover:bg-zinc-100 md:hidden"
+          aria-expanded={isMenuOpen}
+          aria-label="Buka menu"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5" strokeWidth="2">
+            {isMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
             )}
           </svg>
         </button>
       </div>
 
-      {/* Mobile Navigation */}
-      {mobileMenuOpen && (
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.nav
+            className="mx-auto mt-3 w-full max-w-6xl rounded-2xl border border-zinc-200 bg-white/95 p-2 shadow-[0_16px_32px_rgba(24,24,27,0.12)] backdrop-blur md:hidden"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            aria-label="Navigasi mobile"
+          >
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => scrollTo(item.id)}
+                className={`block w-full cursor-pointer rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
+                  activeSection === item.id ? 'bg-zinc-100 text-zinc-950' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </motion.header>
+  );
+}
+
+function HeroSection({ fadeInUp, scrollTo, shouldReduceMotion }) {
+  return (
+    <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <div>
         <motion.div
-          className="md:hidden bg-[#0f0f1a]/90 backdrop-blur-lg"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          transition={{ duration: 0.3 }}
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.45 }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-600"
         >
-          <div className="px-4 py-4 space-y-4">
-            {['Beranda', 'Tentang', 'Proyek', 'Kontak'].map((item) => {
-              const sectionId = item.toLowerCase();
-              const isActive = activeSection === sectionId;
-              
-              return (
-                <a
-                  key={item}
-                  href={`#${sectionId}`}
-                  className={`block font-medium transition-colors duration-300 py-2 ${
-                    isActive ? 'text-[#00f7ff]' : 'hover:text-[#00f7ff]'
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item}
-                </a>
-              );
-            })}
-          </div>
+          <span className="inline-block h-2 w-2 rounded-full bg-blue-600" />
+          Open to Backend Collaboration
         </motion.div>
-      )}
-    </motion.nav>
+
+        <motion.h1
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="display-font text-balance text-4xl font-bold leading-[1.05] tracking-tight text-zinc-950 sm:text-5xl lg:text-7xl"
+        >
+          Membangun Sistem
+          <span className="block text-zinc-400">yang Andal dan Siap Scale</span>
+        </motion.h1>
+
+        <motion.p
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.55, delay: 0.2 }}
+          className="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg"
+        >
+          Saya fokus pada pengembangan backend yang bersih, aman, dan berorientasi performa untuk produk digital yang butuh stabilitas jangka panjang.
+        </motion.p>
+
+        <motion.div
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.55, delay: 0.3 }}
+          className="mt-9 flex flex-wrap items-center gap-4"
+        >
+          <button
+            type="button"
+            onClick={() => scrollTo('proyek')}
+            className="cursor-pointer rounded-2xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+          >
+            Jelajahi Proyek
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollTo('kontak')}
+            className="cursor-pointer rounded-2xl border border-zinc-300 bg-white px-6 py-3 text-sm font-semibold text-zinc-800 transition hover:border-zinc-950 hover:text-zinc-950"
+          >
+            Diskusi Kolaborasi
+          </button>
+        </motion.div>
+      </div>
+
+      <motion.aside
+        variants={fadeInUp}
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.7, delay: 0.25 }}
+        className="relative overflow-hidden rounded-[2rem] border border-zinc-200 bg-gradient-to-br from-zinc-950 to-zinc-800 p-7 text-zinc-100 shadow-[0_24px_56px_rgba(9,9,11,0.35)]"
+      >
+        <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-blue-600/20 blur-3xl" />
+        <div className="relative">
+          <div className="text-xs uppercase tracking-[0.2em] text-zinc-400">Current Focus</div>
+          <div className="display-font mt-3 text-2xl font-semibold">Backend Architecture</div>
+          <p className="mt-3 text-sm leading-relaxed text-zinc-300">
+            API design, database modeling, security hardening, and cloud-ready deployment pipeline.
+          </p>
+
+          <div className="mt-8 grid grid-cols-2 gap-3">
+            {[
+              ['4+', 'Tahun pengalaman'],
+              ['15+', 'Sistem dikembangkan'],
+              ['99.9%', 'Target uptime'],
+              ['24/7', 'Mindset reliability'],
+            ].map(([value, label], index) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.5 + index * 0.08 }}
+                className="rounded-2xl border border-zinc-700 bg-zinc-900/65 p-4"
+              >
+                <div className="display-font text-xl font-semibold text-white">{value}</div>
+                <div className="mt-1 text-xs uppercase tracking-[0.08em] text-zinc-400">{label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.aside>
+    </div>
   );
-};
+}
 
-// Custom Typing Animation Component
-const TypingAnimation = () => {
-  const [text, setText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const fullText = 'Backend Developer';
-
-  useEffect(() => {
-    let index = 0;
-    let typingInterval;
-    let cursorInterval;
-
-    const typeText = () => {
-      if (index < fullText.length) {
-        setText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        // Pause at the end of typing
-        setTimeout(() => {
-          index = 0;
-          setText('');
-          typingInterval = setInterval(typeText, 150);
-        }, 2000);
-        clearInterval(typingInterval);
-      }
-    };
-
-    typingInterval = setInterval(typeText, 150);
-
-    // Blinking cursor
-    cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 500);
-
-    return () => {
-      clearInterval(typingInterval);
-      clearInterval(cursorInterval);
-    };
-  }, []);
-
+function AboutSection({ fadeInUp, shouldReduceMotion }) {
   return (
-    <span>
-      {text}
-      <span className={`ml-1 inline-block w-1 h-8 bg-[#00f7ff] ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
-    </span>
-  );
-};
-
-// Hero Section Component
-const HeroSection = () => {
-  return (
-    <motion.section
-      className="min-h-screen flex flex-col items-center justify-center px-4 text-center"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-    >
-      <motion.h1
-        className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#6a0dad] to-[#00f7ff]"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.8 }}
-      >
-        Martio Husein Samsu
-      </motion.h1>
-      <motion.p
-        className="text-2xl md:text-3xl mb-4 font-semibold min-h-[2.5rem]"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-      >
-        <TypingAnimation />
-      </motion.p>
-      <motion.p
-        className="text-xl md:text-2xl mb-10 max-w-2xl"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.8 }}
-      >
-        Membangun sistem yang kuat dan skalabel dengan teknologi terkini
-      </motion.p>
+    <div className="mx-auto max-w-6xl">
       <motion.div
-        className="flex flex-wrap justify-center gap-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.8 }}
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.25 }}
+        transition={{ duration: 0.45 }}
+        className="mb-12 max-w-2xl"
       >
-        <motion.button
-          className="px-8 py-3 bg-[#6a0dad] text-white font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.5 }}
-        >
-          Lihat Proyek
-        </motion.button>
-        <motion.button
-          className="px-8 py-3 bg-transparent border-2 border-[#00f7ff] text-[#00f7ff] font-semibold rounded-full shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300 transform hover:scale-105"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.5 }}
-        >
-          Hubungi Saya
-        </motion.button>
+        <div className="section-kicker">Tentang Saya</div>
+        <h2 className="display-font mt-3 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">Engineer yang fokus pada kualitas fondasi produk.</h2>
       </motion.div>
-    </motion.section>
-  );
-};
 
-// About Section Component
-const AboutSection = () => (
-  <motion.section
-    className="py-20 px-4"
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true, margin: "-100px" }}
-  >
-    <div className="max-w-6xl mx-auto">
-      <motion.h2 
-        className="text-4xl font-bold mb-16 text-center"
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-      >
-        Tentang Saya
-      </motion.h2>
-      <div className="grid md:grid-cols-3 gap-12 items-center">
-        {/* Foto Profil */}
-        <motion.div
-          className="glass p-4 rounded-2xl flex justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
+      <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <motion.article
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="relative overflow-hidden rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-[0_18px_36px_rgba(9,9,11,0.08)]"
         >
+          <div className="absolute -right-14 -top-12 h-44 w-44 rounded-full bg-blue-600/10 blur-3xl" />
           <div className="relative">
-            <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-[#6a0dad] bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a]">
-              <img src={profil} alt="Profil" className="w-full h-full object-contain" />
+            <div className="mx-auto w-56 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 p-2">
+              <img src={profil} alt="Foto profil Martio Husein" className="h-72 w-full rounded-2xl object-cover" loading="lazy" />
             </div>
-            <div className="absolute inset-0 rounded-full border-2 border-[#00f7ff] animate-ping opacity-20"></div>
+            <h3 className="display-font mt-6 text-2xl font-semibold text-zinc-950">Martio Husein Samsu</h3>
+            <p className="mt-2 text-sm text-zinc-500">Backend Developer | API and System Design</p>
+            <p className="mt-4 text-sm leading-relaxed text-zinc-600">
+              Saya percaya arsitektur backend yang rapi akan membuat tim produk bergerak lebih cepat dan lebih tenang.
+            </p>
           </div>
-        </motion.div>
-        
-        {/* Deskripsi dan Keahlian */}
-        <div className="md:col-span-2">
-          <div className="grid md:grid-cols-2 gap-8">
-            <motion.div
-              className="glass p-8 rounded-2xl"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-2xl font-bold mb-4">Backend Developer</h3>
-              <p className="mb-4">
-                Saya adalah seorang backend developer dengan passion dalam membangun sistem yang kuat, aman, dan skalabel. 
-                Dengan keahlian dalam berbagai teknologi backend modern, saya berfokus pada pembuatan API yang efisien dan database yang teroptimasi.
-              </p>
-              <p>
-                Saya selalu berusaha untuk belajar hal-hal baru dan mengikuti perkembangan terkini dalam dunia backend development, 
-                termasuk arsitektur microservices, containerization, dan cloud computing.
-              </p>
-            </motion.div>
-            <motion.div
-              className="glass p-8 rounded-2xl h-full"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-2xl font-bold mb-4">Keahlian Teknis</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {['Node.js', 'NestJS', 'Laravel', 'Express', 'Python', 'Java', 'Javascript', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'GCP'].map((skill, index) => (
-                  <motion.div 
-                    key={skill} 
-                    className="flex items-center"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+        </motion.article>
+
+        <motion.article
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.55, delay: 0.1 }}
+          className="rounded-[2rem] border border-zinc-200 bg-white p-7 shadow-[0_18px_36px_rgba(9,9,11,0.08)]"
+        >
+          <div className="grid gap-8">
+            <div>
+              <h3 className="display-font text-2xl font-semibold text-zinc-950">Nilai kerja saya</h3>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {[
+                  ['Reliable', 'Sistem stabil dalam trafik tinggi.'],
+                  ['Scalable', 'Mudah dikembangkan tanpa rewrite besar.'],
+                  ['Maintainable', 'Codebase rapi dan mudah diteruskan tim.'],
+                ].map(([title, desc], index) => (
+                  <motion.div
+                    key={title}
+                    initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: 0.2 + index * 0.08 }}
+                    className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4"
                   >
-                    <div className="w-2 h-2 bg-[#00f7ff] rounded-full mr-2"></div>
-                    <span>{skill}</span>
+                    <div className="text-xs font-semibold uppercase tracking-[0.15em] text-blue-700">{title}</div>
+                    <p className="mt-2 text-sm text-zinc-600">{desc}</p>
                   </motion.div>
                 ))}
               </div>
-              <motion.div 
-                className="mt-6 text-center"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.9 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-5xl font-bold text-[#00f7ff] mb-2">4+</div>
-                <div className="text-xl">Tahun Pengalaman</div>
-              </motion.div>
-            </motion.div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-zinc-500">Tech Stack Inti</h4>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {TECH_STACK.map((skill, index) => (
+                  <motion.span
+                    key={skill}
+                    initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.92 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.25, delay: 0.3 + index * 0.025 }}
+                    className="cursor-default rounded-full border border-zinc-200 bg-white px-3 py-1 text-sm text-zinc-700"
+                  >
+                    {skill}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.article>
       </div>
     </div>
-  </motion.section>
-);
-
-// Projects Section Component
-const ProjectsSection = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
-  
-  const projects = [
-    {
-      id: 1,
-      title: "Puspadaya",
-      description: "Puspadaya dirancang untuk membantu deteksi dini stunting pada anak serta pemantauan kehamilan ibu agar penanganan dapat dilakukan lebih cepat dan tepat.",
-      technologies: ["Typescript", "MySQL", "NestJS"],
-      details: "Aplikasi Puspadaya merupakan solusi digital inovatif yang dirancang untuk mengatasi dua isu kesehatan krusial: stunting pada anak dan kesehatan ibu hamil. Dengan sistem deteksi dini, aplikasi ini memungkinkan pemantauan pertumbuhan anak secara berkala, memberikan notifikasi dan rekomendasi kepada orang tua serta tenaga kesehatan jika teridentifikasi adanya risiko stunting. Selain itu, fitur pemantauan kehamilan membantu ibu hamil dalam mencatat kondisi kesehatan, jadwal pemeriksaan, dan mendapatkan informasi penting seputar kehamilan. Dengan demikian, Puspadaya berperan sebagai asisten kesehatan digital yang proaktif, memastikan penanganan yang lebih cepat dan tepat untuk ibu dan anak, serta mendukung upaya pemerintah dalam menurunkan angka stunting.",
-      image: Puspadaya
-    },
-    {
-      id: 2,
-      title: "GetHub",
-      description: "GetHub hadir sebagai platform pencarian talent digital berbasis AI yang mampu merekomendasikan kandidat sesuai kebutuhan perusahaan melalui analisis keahlian dan pengalaman.",
-      technologies: ["typescript", "Node.js", "Express", "MongoDB"],
-      details: "GetHub merevolusi proses rekrutmen talenta digital dengan memanfaatkan kekuatan kecerdasan buatan (AI). Platform ini tidak hanya berfungsi sebagai database talenta, tetapi juga sebagai sistem pencocokan cerdas yang mampu menganalisis secara mendalam keahlian, pengalaman, dan portofolio kandidat. Algoritma AI pada GetHub dapat memahami kebutuhan spesifik perusahaan dan merekomendasikan kandidat yang paling sesuai, tidak hanya berdasarkan kata kunci, tetapi juga berdasarkan potensi dan kesesuaian budaya. Hal ini secara signifikan mempersingkat waktu rekrutmen, mengurangi bias, dan meningkatkan kemungkinan menemukan talenta yang benar-benar tepat untuk mendorong inovasi di perusahaan.",
-      image: GetHub
-    },
-    {
-      id: 3,
-      title: "Sistem Informasi Layanan Program Studi",
-      description: "Sistem Informasi Layanan Program Studi TRPL Poliwangi dibangun untuk meningkatkan efektivitas pengelolaan data, layanan akademik, dan informasi program studi, sehingga dapat mendukung transparansi dan kualitas layanan pendidikan",
-      technologies: ["PHP","Laravel", "MySQL", "Bootstrap"],
-      details: "Sistem Informasi Layanan Program Studi Teknologi Rekayasa Perangkat Lunak (TRPL) di Poliwangi adalah platform terintegrasi yang dibangun untuk mentransformasi administrasi akademik. Sistem ini secara komprehensif mengelola berbagai aspek, mulai dari data mahasiswa, jadwal perkuliahan, hingga penilaian dan transkrip nilai. Dengan adanya sistem ini, layanan akademik menjadi lebih efisien, transparan, dan mudah diakses oleh mahasiswa maupun dosen. Mahasiswa dapat dengan mudah melihat informasi akademik mereka, sementara dosen dapat mengelola materi perkuliahan dan nilai dengan lebih terstruktur. Pada akhirnya, sistem ini tidak hanya meningkatkan efektivitas operasional program studi, tetapi juga mendukung peningkatan kualitas layanan pendidikan dan transparansi informasi kepada seluruh pemangku kepentingan.",
-      image: SistemInformasi
-    }
-  ];
-
-  return (
-    <motion.section
-      className="py-20 px-4 bg-gradient-to-b from-[#0f0f1a] to-[#1a1a2e]"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true, margin: "-100px" }}
-    >
-      <div className="max-w-6xl mx-auto">
-        <motion.h2 
-          className="text-4xl font-bold mb-16 text-center"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          Proyek Backend
-        </motion.h2>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="glass rounded-2xl overflow-hidden flex flex-col h-full relative cursor-pointer"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10 }}
-              onClick={() => setSelectedProject(project)}
-            >
-              <div className="h-48 relative overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-[#0f0f1a]/70 to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-[#6a0dad]/80 to-[#00f7ff]/50 opacity-70"></div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <motion.h3 
-                  className="text-2xl font-bold mb-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 + 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  {project.title}
-                </motion.h3>
-                <motion.p 
-                  className="mb-4 flex-grow"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  {project.description}
-                </motion.p>
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.slice(0, 3).map((tech, techIndex) => (
-                      <motion.span 
-                        key={tech} 
-                        className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2, delay: index * 0.1 + techIndex * 0.05 + 0.3 }}
-                        viewport={{ once: true }}
-                        whileHover={{ scale: 1.1, backgroundColor: '#00f7ff', color: '#0f0f1a' }}
-                      >
-                        {tech}
-                      </motion.span>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <span className="px-3 py-1 bg-[#1a1a2e] text-[#00f7ff] rounded-full text-sm">
-                        +{project.technologies.length - 3}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <motion.button 
-                  className="text-[#00f7ff] font-semibold hover:underline mt-auto flex items-center"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 + 0.5 }}
-                  viewport={{ once: true }}
-                  whileHover={{ x: 5 }}
-                >
-                  Lihat Detail 
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </motion.button>
-              </div>
-              
-              {/* Hover effect overlay */}
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-[#6a0dad]/30 to-[#00f7ff]/30 opacity-0 rounded-2xl"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-      
-      {/* Project Detail Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            className="fixed inset-0 bg-black/80 backdrop-blur-lg z-50 flex items-center justify-center p-4 pt-20"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              className="glass rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto"
-              initial={{ scale: 0.9, y: 50 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 50 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative">
-                <img 
-                  src={selectedProject.image} 
-                  alt={selectedProject.title} 
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] to-transparent"></div>
-                <button
-                  className="absolute top-4 right-4 text-white bg-[#1a1a2e]/50 rounded-full p-2 hover:bg-[#6a0dad] transition-colors"
-                  onClick={() => setSelectedProject(null)}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="p-8">
-                <motion.h3 
-                  className="text-3xl font-bold mb-4"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {selectedProject.title}
-                </motion.h3>
-                <motion.p 
-                  className="text-lg mb-6"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                >
-                  {selectedProject.details}
-                </motion.p>
-                <motion.div 
-                  className="mb-6"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                >
-                  <h4 className="text-xl font-semibold mb-3">Teknologi yang Digunakan:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedProject.technologies.map((tech, index) => (
-                      <motion.span 
-                        key={tech} 
-                        className="px-4 py-2 bg-[#1a1a2e] text-[#00f7ff] rounded-full"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2, delay: index * 0.1 }}
-                      >
-                        {tech}
-                      </motion.span>
-                    ))}
-                  </div>
-                </motion.div>
-                <motion.div 
-                  className="flex justify-end"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                >
-                  <button className="px-6 py-3 bg-[#6a0dad] text-white font-semibold rounded-lg shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300">
-                    Lihat Source Code
-                  </button>
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.section>
   );
-};
+}
 
-// Contact Section Component
-const ContactSection = () => (
-  <motion.section
-    className="py-20 px-4"
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true, margin: "-100px" }}
-  >
-    <div className="max-w-6xl mx-auto">
-      <motion.h2 
-        className="text-4xl font-bold mb-16 text-center"
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
+function ProjectsSection({ fadeInUp, setSelectedProject, shouldReduceMotion }) {
+  return (
+    <div className="mx-auto max-w-6xl">
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.45 }}
+        className="mb-12 flex flex-wrap items-end justify-between gap-4"
       >
-        Hubungi Saya
-      </motion.h2>
-      <div className="grid md:grid-cols-2 gap-12">
-        <motion.div
-          className="glass p-8 rounded-2xl"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <motion.h3 
-            className="text-2xl font-bold mb-6"
-            initial={{ opacity: 0, y: 10 }}
+        <div>
+          <div className="section-kicker">Portofolio Proyek</div>
+          <h2 className="display-font mt-3 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">Solusi backend yang berdampak nyata.</h2>
+        </div>
+        <p className="max-w-md text-sm leading-relaxed text-zinc-600">
+          Tiap proyek dibangun dengan fokus ke reliabilitas sistem, observability, dan efisiensi workflow developer.
+        </p>
+      </motion.div>
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {PROJECTS.map((project, index) => (
+          <motion.article
+            key={project.id}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 22 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, delay: index * 0.08 }}
+            whileHover={{ y: shouldReduceMotion ? 0 : -8 }}
+            className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.7rem] border border-zinc-200 bg-white shadow-[0_18px_34px_rgba(9,9,11,0.08)]"
+            onClick={() => setSelectedProject(project)}
           >
-            Informasi Kontak
-          </motion.h3>
-          <div className="space-y-4">
-            {[
-              { 
-                icon: (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                ),
-                title: "Email",
-                content: "martiohusein27@gmail.com"
-              },
-              { 
-                icon: (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                ),
-                title: "Lokasi",
-                content: "Banyuwangi, Indonesia"
-              },
-              { 
-                icon: (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                    />
-                  </svg>
-                ),
-                title: "GitHub",
-                content: "github.com/martiohusein"
-              },
-              { 
-                icon: (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
-                ),
-                title: "LinkedIn",
-                content: (
-                  <a
-                    href="https://www.linkedin.com/in/martio-husein-samsu/"
-                    className="text-[#00f7ff] hover:underline"
-                  >
-                    https://www.linkedin.com/in/martio-husein-samsu/
-                  </a>
-                )
-              }
-            ].map((item, index) => (
-              <motion.div 
-                className="flex items-start"
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="mt-1 mr-4 text-[#00f7ff]">
-                  {item.icon}
-                </div>
-                <div>
-                  <h4 className="font-semibold">{item.title}</h4>
-                  <p>{item.content}</p>
-                </div>
-              </motion.div>
-            ))}
+            <div className="relative h-52 overflow-hidden">
+              <img
+                src={project.image}
+                alt={`Preview ${project.title}`}
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
+              <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-zinc-950/55 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+                {project.year}
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col p-6">
+              <h3 className="display-font text-2xl font-semibold text-zinc-950">{project.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600">{project.summary}</p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {project.technologies.slice(0, 3).map((tech) => (
+                  <span key={`${project.id}-${tech}`} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-6 inline-flex items-center text-sm font-semibold text-blue-700">
+                Lihat detail
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="ml-1 h-4 w-4 transition group-hover:translate-x-1">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </div>
+            </div>
+          </motion.article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ContactSection({ fadeInUp, shouldReduceMotion }) {
+  return (
+    <div className="mx-auto max-w-6xl rounded-[2rem] border border-zinc-200 bg-zinc-950 p-8 text-zinc-100 shadow-[0_28px_60px_rgba(9,9,11,0.45)] sm:p-12">
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.45 }}
+        className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]"
+      >
+        <div>
+          <div className="section-kicker !border-zinc-700 !bg-zinc-900 !text-zinc-300">Hubungi Saya</div>
+          <h2 className="display-font mt-4 text-3xl font-semibold tracking-tight text-white sm:text-5xl">Siap membangun produk yang lebih tangguh bersama tim Anda.</h2>
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-zinc-300 sm:text-base">
+            Jika Anda butuh backend engineer untuk merancang API, merapikan arsitektur data, atau meningkatkan keandalan sistem, saya siap berdiskusi.
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <ContactInfo title="Email" value="martiohusein27@gmail.com" />
+            <ContactInfo title="Lokasi" value="Banyuwangi, Indonesia" />
+            <ContactInfo title="Fokus" value="Backend Engineering" />
+            <ContactInfo title="Ketersediaan" value="Freelance and Full-time" />
           </div>
 
-          <motion.div 
-            className="mt-8"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            viewport={{ once: true }}
-          >
-            <h4 className="font-semibold mb-4">Koneksi Sosial</h4>
-            <div className="flex space-x-4">
-              {["github", "linkedin", "twitter"].map((social, index) => (
-                <motion.a
-                  key={social}
-                  href="#"
-                  className="w-12 h-12 rounded-full bg-[#1a1a2e] flex items-center justify-center hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.8 + index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <div className="w-6 h-6 bg-gray-400 rounded-full"></div>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="glass p-8 rounded-2xl"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <motion.h3 
-            className="text-2xl font-bold mb-6"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            viewport={{ once: true }}
-          >
-            Kirim Pesan
-          </motion.h3>
-          <form className="space-y-6">
-            {[
-              { id: "name", label: "Nama", type: "text", placeholder: "Nama Anda" },
-              { id: "email", label: "Email", type: "email", placeholder: "email@contoh.com" }
-            ].map((field, index) => (
-              <motion.div
-                key={field.id}
-                initial={{ opacity: 0, y: 10 }}
+          <div className="mt-8 flex flex-wrap gap-3">
+            {SOCIALS.map((social, index) => (
+              <motion.a
+                key={social.name}
+                href={social.href}
+                target={social.href.startsWith('http') ? '_blank' : undefined}
+                rel={social.href.startsWith('http') ? 'noreferrer' : undefined}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
                 viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.22 + index * 0.08 }}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition hover:border-blue-500 hover:text-white"
               >
-                <label htmlFor={field.id} className="block mb-2 font-medium">
-                  {field.label}
-                </label>
-                <input
-                  type={field.type}
-                  id={field.id}
-                  className="w-full px-4 py-3 bg-[#1a1a2e] border border-[#2d2d44] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f7ff]"
-                  placeholder={field.placeholder}
-                />
-              </motion.div>
+                {social.icon}
+                {social.name}
+              </motion.a>
             ))}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <label htmlFor="message" className="block mb-2 font-medium">
+          </div>
+        </div>
+
+        <motion.form
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.12 }}
+          className="rounded-3xl border border-zinc-800 bg-zinc-900/70 p-6"
+          onSubmit={(event) => event.preventDefault()}
+        >
+          <h3 className="display-font text-2xl font-semibold text-white">Kirim pesan cepat</h3>
+          <p className="mt-2 text-sm text-zinc-400">Isi form di bawah untuk memulai percakapan kolaborasi.</p>
+
+          <div className="mt-6 space-y-4">
+            <Field id="name" label="Nama" type="text" placeholder="Nama Anda" />
+            <Field id="email" label="Email" type="email" placeholder="email@contoh.com" />
+            <div>
+              <label htmlFor="message" className="mb-2 block text-sm font-medium text-zinc-200">
                 Pesan
               </label>
               <textarea
                 id="message"
-                rows="5"
-                className="w-full px-4 py-3 bg-[#1a1a2e] border border-[#2d2d44] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f7ff]"
-                placeholder="Pesan Anda..."
-              ></textarea>
-            </motion.div>
-            <motion.button
-              type="submit"
-              className="w-full px-6 py-3 bg-[#6a0dad] text-white font-semibold rounded-lg shadow-lg hover:bg-[#00f7ff] hover:text-[#0f0f1a] transition-all duration-300"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.6 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Kirim Pesan
-            </motion.button>
-          </form>
-        </motion.div>
-      </div>
-    </div>
-  </motion.section>
-);
-
-// Footer Component
-const Footer = () => (
-  <motion.footer 
-    className="py-10 px-4 border-t border-[#2d2d44]"
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true, margin: "-100px" }}
-  >
-    <div className="max-w-6xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between items-center">
-        <motion.div 
-          className="mb-6 md:mb-0"
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#6a0dad] to-[#00f7ff]">
-            Martio Husein Samsu
+                rows={5}
+                placeholder="Ceritakan kebutuhan project Anda..."
+                className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+              />
+            </div>
           </div>
-          <p className="mt-2 text-[#a0a0c0]">Backend Developer</p>
-        </motion.div>
-        <motion.div 
-          className="flex space-x-6"
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          {['github', 'linkedin', 'twitter', 'email'].map((social, index) => (
-            <motion.a
-              key={social}
-              href="#"
-              className="text-[#a0a0c0] hover:text-[#00f7ff] transition-colors duration-300"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -3 }}
-            >
-              <div className="w-6 h-6 bg-gray-400 rounded-full"></div>
-            </motion.a>
-          ))}
-        </motion.div>
-      </div>
-      <motion.div 
-        className="mt-8 pt-8 border-t border-[#2d2d44] text-center text-[#a0a0c0]"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        viewport={{ once: true }}
-      >
-        <p>© {new Date().getFullYear()} Martio Husein Samsu. Hak Cipta Dilindungi.</p>
+
+          <button
+            type="submit"
+            className="mt-6 w-full cursor-pointer rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
+          >
+            Kirim Pesan
+          </button>
+        </motion.form>
       </motion.div>
     </div>
-  </motion.footer>
-);
+  );
+}
+
+function Field({ id, label, placeholder, type }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-zinc-200">
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+      />
+    </div>
+  );
+}
+
+function ContactInfo({ title, value }) {
+  return (
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 px-4 py-3">
+      <div className="text-[11px] uppercase tracking-[0.14em] text-zinc-500">{title}</div>
+      <div className="mt-1 text-sm font-medium text-zinc-100">{value}</div>
+    </div>
+  );
+}
+
+function ProjectModal({ onClose, project, shouldReduceMotion }) {
+  useEffect(() => {
+    const onEscape = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onEscape);
+    return () => window.removeEventListener('keydown', onEscape);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/70 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Detail proyek ${project.title}`}
+    >
+      <motion.article
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24, scale: shouldReduceMotion ? 1 : 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: shouldReduceMotion ? 0 : 24, scale: shouldReduceMotion ? 1 : 0.98 }}
+        transition={{ duration: 0.25 }}
+        className="max-h-[88vh] w-full max-w-4xl overflow-auto rounded-[2rem] border border-zinc-200 bg-white shadow-[0_24px_58px_rgba(9,9,11,0.3)]"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="relative h-64 overflow-hidden sm:h-80">
+          <img src={project.image} alt={`Detail visual ${project.title}`} className="h-full w-full object-cover" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent" />
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-4 top-4 inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-zinc-950/70 text-white backdrop-blur transition hover:bg-zinc-800"
+            aria-label="Tutup modal"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="p-6 sm:p-8">
+          <div className="inline-block rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-600">
+            {project.year}
+          </div>
+          <h3 className="display-font mt-4 text-3xl font-semibold text-zinc-950 sm:text-4xl">{project.title}</h3>
+          <p className="mt-4 text-sm leading-relaxed text-zinc-600 sm:text-base">{project.details}</p>
+
+          <div className="mt-6 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Impact</div>
+            <p className="mt-2 text-sm text-zinc-700">{project.impact}</p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {project.technologies.map((tech) => (
+              <span key={`${project.id}-${tech}`} className="rounded-full border border-zinc-300 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </motion.article>
+    </motion.div>
+  );
+}
+
+function BackgroundDecor({ shouldReduceMotion }) {
+  return (
+    <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+      <motion.div
+        className="absolute -left-24 top-24 h-80 w-80 rounded-full bg-blue-300/25 blur-3xl"
+        animate={shouldReduceMotion ? undefined : { x: [0, 40, 0], y: [0, -30, 0] }}
+        transition={shouldReduceMotion ? undefined : { duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute right-0 top-1/3 h-[30rem] w-[30rem] rounded-full bg-zinc-300/25 blur-3xl"
+        animate={shouldReduceMotion ? undefined : { x: [0, -50, 0], y: [0, 35, 0] }}
+        transition={shouldReduceMotion ? undefined : { duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.44),rgba(250,250,250,0.98)_48%)]" />
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.35]" />
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="relative z-10 border-t border-zinc-200 px-4 pb-10 pt-8 sm:px-6 lg:px-10">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 text-sm text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <span className="display-font font-semibold text-zinc-900">Martio Husein Samsu</span>
+          <span className="ml-2 text-zinc-500">Backend Developer</span>
+        </div>
+        <div className="text-zinc-500">(c) {new Date().getFullYear()} All rights reserved.</div>
+      </div>
+    </footer>
+  );
+}
 
 export default App;
