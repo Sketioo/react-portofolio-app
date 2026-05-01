@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
-  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fafafa;
@@ -15,7 +19,12 @@ body {
 }
 
 .display-font {
-  font-family: 'Space Grotesk', 'DM Sans', sans-serif;
+  font-family: 'Archivo', 'Space Grotesk', sans-serif;
+}
+
+.app-shell {
+  --spot-x: -9999px;
+  --spot-y: -9999px;
 }
 
 .section-kicker {
@@ -50,6 +59,10 @@ body {
   background-size: 42px 42px;
 }
 
+.spotlight-layer {
+  background: radial-gradient(420px circle at var(--spot-x) var(--spot-y), rgba(37, 99, 235, 0.2), transparent 70%);
+}
+
 :focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
@@ -81,5 +94,13 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .spotlight-layer {
+    background: none;
   }
 }

@@ -11,6 +11,10 @@
 # production
 /build
 /build-temp
+/build-verify-v2
+/build-verify-v3
+/build-verify-v4
+/build-verify-v5
 
 # misc
 .DS_Store

@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
 import Puspadaya from './images/Puspadaya.png';
 import GetHub from './images/Gethub.png';
 import SistemInformasi from './images/Sistem-Informasi.png';
+import LamarFit from './images/Lamarfit.png';
 import profil from './images/profil.png';
 
 const NAV_ITEMS = [
@@ -13,6 +14,11 @@ const NAV_ITEMS = [
 ];
 
 const TECH_STACK = [
+  'React',
+  'Next.js',
+  'Vue.js',
+  'Tailwind CSS',
+  'Bootstrap',
   'Node.js',
   'NestJS',
   'Laravel',
@@ -32,11 +38,27 @@ const PROJECTS = [
     id: 1,
     title: 'Puspadaya',
     year: '2025',
+    category: 'HealthTech',
+    role: 'Fullstack Engineer',
+    duration: '1.8 tahun',
+    team: '4 orang',
     summary:
       'Platform kesehatan ibu dan anak dengan deteksi dini risiko stunting dan pemantauan kehamilan terintegrasi.',
+    challenge:
+      'Membangun backend yang mampu menangani data kesehatan secara aman sambil memberikan notifikasi risiko secara cepat untuk tenaga kesehatan.',
     details:
       'Aplikasi Puspadaya berfokus pada dua misi utama: monitoring tumbuh kembang anak dan kesehatan ibu hamil. Sistem ini membantu tenaga kesehatan memantau indikator penting, mengirim notifikasi berbasis risiko, dan mempercepat keputusan intervensi agar penanganan bisa dilakukan lebih awal.',
+    approach: [
+      'Merancang struktur API modular untuk data kehamilan, tumbuh kembang anak, dan alert medis.',
+      'Menerapkan validasi data berlapis untuk menjaga konsistensi input dari banyak sumber.',
+      'Membangun mekanisme penilaian risiko agar sistem bisa memprioritaskan kasus penting lebih cepat.',
+    ],
     impact: 'Mempercepat proses identifikasi risiko kesehatan keluarga melalui monitoring berkala dan notifikasi proaktif.',
+    outcomes: [
+      'Alur input dan verifikasi data kesehatan jadi lebih terstruktur.',
+      'Petugas dapat memantau kondisi ibu dan anak dalam satu dashboard terintegrasi.',
+      'Keputusan intervensi bisa dilakukan lebih awal berbasis sinyal risiko.',
+    ],
     technologies: ['TypeScript', 'NestJS', 'MySQL'],
     image: Puspadaya,
   },
@@ -44,27 +66,90 @@ const PROJECTS = [
     id: 2,
     title: 'GetHub',
     year: '2024',
+    category: 'AI Platform',
+    role: 'Fullstack Engineer',
+    duration: '6 bulan',
+    team: '5 orang',
     summary:
       'Platform pencarian talenta digital berbasis AI untuk merekomendasikan kandidat paling relevan sesuai kebutuhan perusahaan.',
+    challenge:
+      'Menyediakan fondasi backend yang mampu melayani proses pencocokan kandidat secara cepat tanpa mengorbankan kualitas rekomendasi.',
     details:
       'GetHub mengoptimalkan proses hiring dengan mesin rekomendasi AI yang menilai skill, pengalaman, dan kecocokan kandidat terhadap kebutuhan tim. Pendekatan ini membantu tim rekrutmen bergerak lebih cepat, lebih akurat, dan mengurangi bias seleksi berbasis kata kunci semata.',
+    approach: [
+      'Mendesain endpoint pencarian dan scoring kandidat agar respons tetap cepat di berbagai skenario query.',
+      'Mengoptimalkan model data profil kandidat untuk memudahkan proses ranking oleh modul AI.',
+      'Menerapkan logging terstruktur untuk memonitor performa pencarian dan akurasi rekomendasi.',
+    ],
     impact: 'Memotong waktu screening kandidat dan meningkatkan kualitas short-list rekrutmen teknis.',
+    outcomes: [
+      'Pipeline pencarian kandidat menjadi lebih stabil dan mudah di-scale.',
+      'Tim rekrutmen bisa menyaring kandidat dengan proses yang lebih terukur.',
+      'Integrasi backend dan engine AI menjadi lebih rapi untuk iterasi fitur berikutnya.',
+    ],
     technologies: ['TypeScript', 'Node.js', 'Express', 'MongoDB'],
     image: GetHub,
+  },
+  {
+    id: 4,
+    title: 'Lamar Fit',
+    year: '2026',
+    category: 'AI Platform',
+    role: 'Fullstack Developer',
+    duration: 'Ongoing',
+    team: 'Solo Product',
+    summary:
+      'Produk digital berbasis AI untuk analisis CV dan generate CV dari nol secara cepat, terstruktur, dan relevan dengan posisi yang dituju.',
+    challenge:
+      'Membangun alur end-to-end yang bisa menganalisis CV existing sekaligus membuat CV baru dari input pengguna dengan hasil yang tetap personal dan siap pakai.',
+    details:
+      'Lamar Fit adalah aplikasi AI yang membantu pengguna meningkatkan kualitas CV melalui dua jalur utama: analisis CV existing dan generate CV dari nol. Sistem dirancang untuk memetakan gap profil kandidat terhadap posisi target, lalu menghasilkan struktur CV yang lebih kuat, terarah, dan ATS-friendly.',
+    approach: [
+      'Membangun arsitektur fullstack dengan Next.js untuk pengalaman UI yang cepat dan alur interaktif.',
+      'Mendesain schema PostgreSQL untuk menyimpan profil, versi CV, histori analisis, dan preferensi pengguna.',
+      'Mengintegrasikan pipeline AI untuk scoring, saran perbaikan konten, dan penyusunan CV baru berbasis konteks.',
+    ],
+    impact:
+      'Mempermudah proses persiapan dokumen karier dengan insight otomatis dan draft CV yang lebih relevan dengan kebutuhan rekrutmen modern.',
+    outcomes: [
+      'Pengguna bisa mengetahui kekuatan dan kelemahan CV secara instan.',
+      'Proses membuat CV dari nol menjadi lebih cepat dan terarah.',
+      'Struktur data mendukung iterasi produk AI dan personalisasi lanjutan.',
+    ],
+    technologies: ['Next.js', 'PostgreSQL', 'AI Integration'],
+    image: LamarFit,
   },
   {
     id: 3,
     title: 'Sistem Informasi Layanan Program Studi',
     year: '2023',
+    category: 'Education',
+    role: 'Fullstack Developer',
+    duration: '2 bulan',
+    team: '3 orang',
     summary:
       'Platform administrasi akademik terpusat untuk layanan data, jadwal, nilai, dan informasi program studi TRPL Poliwangi.',
+    challenge:
+      'Mengintegrasikan banyak alur administrasi akademik manual ke sistem yang konsisten, mudah dipakai, dan minim duplikasi data.',
     details:
       'Sistem ini dibangun untuk menyederhanakan proses layanan akademik agar mahasiswa dan dosen mendapatkan akses informasi yang lebih cepat, transparan, dan terstruktur. Pengelolaan data akademik menjadi lebih efisien sekaligus mengurangi proses manual yang berulang.',
+    approach: [
+      'Menyusun skema data layanan akademik yang terpusat untuk mencegah inkonsistensi antar modul.',
+      'Membangun API layanan internal untuk jadwal, nilai, dan administrasi dokumen.',
+      'Meningkatkan struktur query dan relasi data agar proses pencarian data akademik lebih efisien.',
+    ],
     impact: 'Meningkatkan transparansi layanan akademik dan efisiensi operasional program studi.',
+    outcomes: [
+      'Proses layanan akademik menjadi lebih cepat dan mudah dilacak.',
+      'Mahasiswa serta dosen mendapat akses informasi yang lebih konsisten.',
+      'Beban proses administratif manual menurun secara signifikan.',
+    ],
     technologies: ['PHP', 'Laravel', 'MySQL', 'Bootstrap'],
     image: SistemInformasi,
   },
 ];
+
+const FILTERS = ['Semua', 'HealthTech', 'AI Platform', 'Education'];
 
 const SOCIALS = [
   {
@@ -103,8 +188,20 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [showIntro, setShowIntro] = useState(!shouldReduceMotion);
+  const [spotlight, setSpotlight] = useState({ x: -9999, y: -9999 });
 
   const sectionIds = useMemo(() => NAV_ITEMS.map((item) => item.id), []);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setShowIntro(false);
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => setShowIntro(false), 1500);
+    return () => window.clearTimeout(timer);
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -143,7 +240,13 @@ function App() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-zinc-50 text-zinc-950">
+    <div
+      className="app-shell relative min-h-screen overflow-hidden bg-zinc-50 text-zinc-950"
+      style={{ '--spot-x': `${spotlight.x}px`, '--spot-y': `${spotlight.y}px` }}
+      onMouseMove={(event) => setSpotlight({ x: event.clientX, y: event.clientY })}
+      onMouseLeave={() => setSpotlight({ x: -9999, y: -9999 })}
+    >
+      <ScrollProgress />
       <BackgroundDecor shouldReduceMotion={shouldReduceMotion} />
 
       <Navbar
@@ -155,8 +258,12 @@ function App() {
       />
 
       <main className="relative z-10">
-        <section id="beranda" className="px-4 pb-24 pt-28 sm:px-6 lg:px-10">
+        <section id="beranda" className="px-4 pb-20 pt-28 sm:px-6 lg:px-10">
           <HeroSection fadeInUp={fadeInUp} scrollTo={scrollTo} shouldReduceMotion={shouldReduceMotion} />
+        </section>
+
+        <section className="px-4 sm:px-6 lg:px-10">
+          <ExperienceRail shouldReduceMotion={shouldReduceMotion} />
         </section>
 
         <section id="tentang" className="px-4 py-24 sm:px-6 lg:px-10">
@@ -179,6 +286,10 @@ function App() {
       <Footer />
 
       <AnimatePresence>
+        {showIntro && <IntroOverlay />}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {selectedProject && (
           <ProjectModal
             project={selectedProject}
@@ -188,6 +299,41 @@ function App() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 28, mass: 0.25 });
+
+  return (
+    <motion.div
+      className="fixed left-0 right-0 top-0 z-[80] h-1 origin-left bg-gradient-to-r from-blue-600 via-zinc-900 to-blue-400"
+      style={{ scaleX }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function IntroOverlay() {
+  return (
+    <motion.div
+      className="fixed inset-0 z-[90] flex items-center justify-center bg-zinc-950"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.45 }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.4 }}
+        className="text-center"
+      >
+        <div className="text-xs uppercase tracking-[0.24em] text-zinc-400">Portfolio Experience</div>
+        <div className="display-font mt-4 text-4xl font-semibold text-white sm:text-5xl">Martio Husein Samsu</div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -213,7 +359,7 @@ function Navbar({ activeSection, isMenuOpen, scrolled, setIsMenuOpen, scrollTo }
           aria-label="Ke beranda"
         >
           <div className="display-font text-lg font-semibold tracking-tight text-zinc-950 sm:text-xl">Martio Husein</div>
-          <div className="text-xs uppercase tracking-[0.2em] text-zinc-500 transition group-hover:text-blue-600">Backend Engineer</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-zinc-500 transition group-hover:text-blue-600">Fullstack Engineer</div>
         </button>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
@@ -299,7 +445,7 @@ function HeroSection({ fadeInUp, scrollTo, shouldReduceMotion }) {
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-600"
         >
           <span className="inline-block h-2 w-2 rounded-full bg-blue-600" />
-          Open to Backend Collaboration
+          Open to Fullstack Collaboration
         </motion.div>
 
         <motion.h1
@@ -320,7 +466,7 @@ function HeroSection({ fadeInUp, scrollTo, shouldReduceMotion }) {
           transition={{ duration: 0.55, delay: 0.2 }}
           className="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg"
         >
-          Saya fokus pada pengembangan backend yang bersih, aman, dan berorientasi performa untuk produk digital yang butuh stabilitas jangka panjang.
+          Saya fokus pada pengembangan fullstack yang bersih, aman, dan berorientasi performa untuk produk digital yang butuh stabilitas jangka panjang.
         </motion.p>
 
         <motion.div
@@ -352,12 +498,13 @@ function HeroSection({ fadeInUp, scrollTo, shouldReduceMotion }) {
         initial="hidden"
         animate="visible"
         transition={{ duration: 0.7, delay: 0.25 }}
+        whileHover={{ rotateX: shouldReduceMotion ? 0 : -2, rotateY: shouldReduceMotion ? 0 : 2 }}
         className="relative overflow-hidden rounded-[2rem] border border-zinc-200 bg-gradient-to-br from-zinc-950 to-zinc-800 p-7 text-zinc-100 shadow-[0_24px_56px_rgba(9,9,11,0.35)]"
       >
         <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-blue-600/20 blur-3xl" />
         <div className="relative">
           <div className="text-xs uppercase tracking-[0.2em] text-zinc-400">Current Focus</div>
-          <div className="display-font mt-3 text-2xl font-semibold">Backend Architecture</div>
+          <div className="display-font mt-3 text-2xl font-semibold">Fullstack Architecture</div>
           <p className="mt-3 text-sm leading-relaxed text-zinc-300">
             API design, database modeling, security hardening, and cloud-ready deployment pipeline.
           </p>
@@ -383,6 +530,32 @@ function HeroSection({ fadeInUp, scrollTo, shouldReduceMotion }) {
           </div>
         </div>
       </motion.aside>
+    </div>
+  );
+}
+
+function ExperienceRail({ shouldReduceMotion }) {
+  const metrics = [
+    ['Production mindset', 'Reliability first approach'],
+    ['API architecture', 'Maintainable and secure design'],
+    ['Data modeling', 'Performance-aware queries'],
+    ['Team velocity', 'Clear structure and documentation'],
+  ];
+
+  return (
+    <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+      <motion.div
+        className="flex gap-3 p-3"
+        animate={shouldReduceMotion ? undefined : { x: ['0%', '-50%'] }}
+        transition={shouldReduceMotion ? undefined : { repeat: Infinity, duration: 26, ease: 'linear' }}
+      >
+        {[...metrics, ...metrics].map(([title, subtitle], index) => (
+          <div key={`${title}-${index}`} className="min-w-[240px] rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3">
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">{title}</div>
+            <div className="mt-1 text-sm text-zinc-600">{subtitle}</div>
+          </div>
+        ))}
+      </motion.div>
     </div>
   );
 }
@@ -417,9 +590,9 @@ function AboutSection({ fadeInUp, shouldReduceMotion }) {
               <img src={profil} alt="Foto profil Martio Husein" className="h-72 w-full rounded-2xl object-cover" loading="lazy" />
             </div>
             <h3 className="display-font mt-6 text-2xl font-semibold text-zinc-950">Martio Husein Samsu</h3>
-            <p className="mt-2 text-sm text-zinc-500">Backend Developer | API and System Design</p>
+            <p className="mt-2 text-sm text-zinc-500">Fullstack Developer | Web App and API System Design</p>
             <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-              Saya percaya arsitektur backend yang rapi akan membuat tim produk bergerak lebih cepat dan lebih tenang.
+              Saya percaya arsitektur fullstack yang rapi akan membuat tim produk bergerak lebih cepat dan lebih tenang.
             </p>
           </div>
         </motion.article>
@@ -481,6 +654,12 @@ function AboutSection({ fadeInUp, shouldReduceMotion }) {
 }
 
 function ProjectsSection({ fadeInUp, setSelectedProject, shouldReduceMotion }) {
+  const [activeFilter, setActiveFilter] = useState('Semua');
+  const filteredProjects = useMemo(
+    () => PROJECTS.filter((project) => activeFilter === 'Semua' || project.category === activeFilter),
+    [activeFilter]
+  );
+
   return (
     <div className="mx-auto max-w-6xl">
       <motion.div
@@ -489,64 +668,92 @@ function ProjectsSection({ fadeInUp, setSelectedProject, shouldReduceMotion }) {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.45 }}
-        className="mb-12 flex flex-wrap items-end justify-between gap-4"
+        className="mb-8 flex flex-wrap items-end justify-between gap-4"
       >
         <div>
           <div className="section-kicker">Portofolio Proyek</div>
-          <h2 className="display-font mt-3 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">Solusi backend yang berdampak nyata.</h2>
+          <h2 className="display-font mt-3 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">Solusi fullstack yang berdampak nyata.</h2>
         </div>
         <p className="max-w-md text-sm leading-relaxed text-zinc-600">
           Tiap proyek dibangun dengan fokus ke reliabilitas sistem, observability, dan efisiensi workflow developer.
         </p>
       </motion.div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {PROJECTS.map((project, index) => (
-          <motion.article
-            key={project.id}
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.4, delay: index * 0.08 }}
-            whileHover={{ y: shouldReduceMotion ? 0 : -8 }}
-            className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.7rem] border border-zinc-200 bg-white shadow-[0_18px_34px_rgba(9,9,11,0.08)]"
-            onClick={() => setSelectedProject(project)}
+      <div className="mb-8 flex flex-wrap gap-2">
+        {FILTERS.map((filter) => (
+          <button
+            key={filter}
+            type="button"
+            onClick={() => setActiveFilter(filter)}
+            className={`relative cursor-pointer rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition ${
+              activeFilter === filter
+                ? 'border-zinc-900 text-white'
+                : 'border-zinc-300 bg-white text-zinc-600 hover:border-zinc-900 hover:text-zinc-900'
+            }`}
           >
-            <div className="relative h-52 overflow-hidden">
-              <img
-                src={project.image}
-                alt={`Preview ${project.title}`}
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                loading="lazy"
+            {activeFilter === filter && (
+              <motion.span
+                layoutId="filter-active"
+                className="absolute inset-0 -z-10 rounded-full bg-zinc-900"
+                transition={{ type: 'spring', stiffness: 350, damping: 30 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
-              <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-zinc-950/55 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-                {project.year}
-              </div>
-            </div>
-
-            <div className="flex flex-1 flex-col p-6">
-              <h3 className="display-font text-2xl font-semibold text-zinc-950">{project.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600">{project.summary}</p>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                {project.technologies.slice(0, 3).map((tech) => (
-                  <span key={`${project.id}-${tech}`} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-6 inline-flex items-center text-sm font-semibold text-blue-700">
-                Lihat detail
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="ml-1 h-4 w-4 transition group-hover:translate-x-1">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </div>
-            </div>
-          </motion.article>
+            )}
+            {filter}
+          </button>
         ))}
       </div>
+
+      <motion.div layout className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project, index) => (
+            <motion.article
+              key={project.id}
+              layout
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+              transition={{ duration: 0.32, delay: index * 0.03 }}
+              whileHover={{ y: shouldReduceMotion ? 0 : -8 }}
+              className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.7rem] border border-zinc-200 bg-white shadow-[0_18px_34px_rgba(9,9,11,0.08)]"
+              onClick={() => setSelectedProject(project)}
+            >
+              <div className="relative h-52 overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={`Preview ${project.title}`}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
+                <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-zinc-950/55 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+                  {project.year}
+                </div>
+              </div>
+
+              <div className="flex flex-1 flex-col p-6">
+                <div className="mb-2 text-[11px] uppercase tracking-[0.14em] text-blue-700">{project.category}</div>
+                <h3 className="display-font text-2xl font-semibold text-zinc-950">{project.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600">{project.summary}</p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {project.technologies.slice(0, 3).map((tech) => (
+                    <span key={`${project.id}-${tech}`} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-6 inline-flex items-center text-sm font-semibold text-blue-700">
+                  Lihat detail
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="ml-1 h-4 w-4 transition group-hover:translate-x-1">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }
@@ -566,13 +773,13 @@ function ContactSection({ fadeInUp, shouldReduceMotion }) {
           <div className="section-kicker !border-zinc-700 !bg-zinc-900 !text-zinc-300">Hubungi Saya</div>
           <h2 className="display-font mt-4 text-3xl font-semibold tracking-tight text-white sm:text-5xl">Siap membangun produk yang lebih tangguh bersama tim Anda.</h2>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-zinc-300 sm:text-base">
-            Jika Anda butuh backend engineer untuk merancang API, merapikan arsitektur data, atau meningkatkan keandalan sistem, saya siap berdiskusi.
+            Jika Anda butuh fullstack engineer untuk membangun produk end-to-end, merapikan arsitektur data, atau meningkatkan keandalan sistem, saya siap berdiskusi.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <ContactInfo title="Email" value="martiohusein27@gmail.com" />
             <ContactInfo title="Lokasi" value="Banyuwangi, Indonesia" />
-            <ContactInfo title="Fokus" value="Backend Engineering" />
+            <ContactInfo title="Fokus" value="Fullstack Engineering" />
             <ContactInfo title="Ketersediaan" value="Freelance and Full-time" />
           </div>
 
@@ -685,12 +892,20 @@ function ProjectModal({ onClose, project, shouldReduceMotion }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: shouldReduceMotion ? 0 : 24, scale: shouldReduceMotion ? 1 : 0.98 }}
         transition={{ duration: 0.25 }}
-        className="max-h-[88vh] w-full max-w-4xl overflow-auto rounded-[2rem] border border-zinc-200 bg-white shadow-[0_24px_58px_rgba(9,9,11,0.3)]"
+        className="max-h-[88vh] w-full max-w-5xl overflow-auto rounded-[2rem] border border-zinc-200 bg-white shadow-[0_24px_58px_rgba(9,9,11,0.3)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="relative h-64 overflow-hidden sm:h-80">
+        <div className="relative h-64 overflow-hidden sm:h-[22rem]">
           <img src={project.image} alt={`Detail visual ${project.title}`} className="h-full w-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent" />
+          <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+            <div className="rounded-full border border-white/30 bg-zinc-950/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
+              {project.category}
+            </div>
+            <div className="rounded-full border border-white/30 bg-zinc-950/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
+              {project.year}
+            </div>
+          </div>
           <button
             type="button"
             onClick={onClose}
@@ -704,27 +919,107 @@ function ProjectModal({ onClose, project, shouldReduceMotion }) {
         </div>
 
         <div className="p-6 sm:p-8">
-          <div className="inline-block rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-600">
-            {project.year}
-          </div>
-          <h3 className="display-font mt-4 text-3xl font-semibold text-zinc-950 sm:text-4xl">{project.title}</h3>
-          <p className="mt-4 text-sm leading-relaxed text-zinc-600 sm:text-base">{project.details}</p>
+          <h3 className="display-font text-3xl font-semibold text-zinc-950 sm:text-4xl">{project.title}</h3>
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base">{project.summary}</p>
 
-          <div className="mt-6 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Impact</div>
-            <p className="mt-2 text-sm text-zinc-700">{project.impact}</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <MetaPill label="Role" value={project.role} />
+            <MetaPill label="Durasi" value={project.duration} />
+            <MetaPill label="Tim" value={project.team} />
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-2">
-            {project.technologies.map((tech) => (
-              <span key={`${project.id}-${tech}`} className="rounded-full border border-zinc-300 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
-                {tech}
-              </span>
-            ))}
+          <div className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+            <div className="space-y-6">
+              <DetailSection title="Gambaran Proyek" number="01">
+                <p className="text-sm leading-relaxed text-zinc-600 sm:text-base">{project.details}</p>
+              </DetailSection>
+
+              <DetailSection title="Tantangan Utama" number="02">
+                <p className="text-sm leading-relaxed text-zinc-600 sm:text-base">{project.challenge}</p>
+              </DetailSection>
+
+              <DetailSection title="Pendekatan Teknis" number="03">
+                <ul className="space-y-3">
+                  {project.approach.map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-zinc-700 sm:text-base">
+                      <span className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </DetailSection>
+
+              <DetailSection title="Outcome" number="04">
+                <ul className="space-y-2">
+                  {project.outcomes.map((item) => (
+                    <li key={item} className="text-sm leading-relaxed text-zinc-700 sm:text-base">
+                      - {item}
+                    </li>
+                  ))}
+                </ul>
+              </DetailSection>
+            </div>
+
+            <aside className="space-y-6">
+              <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Impact</div>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-700">{project.impact}</p>
+              </div>
+
+              <div className="rounded-2xl border border-zinc-200 bg-white p-5">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Tech Stack</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <span key={`${project.id}-${tech}`} className="rounded-full border border-zinc-300 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-zinc-200 bg-zinc-900 p-5 text-white">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-300">CTA</div>
+                <p className="mt-2 text-sm text-zinc-300">Butuh implementasi sistem serupa untuk produk Anda?</p>
+                <a
+                  href="#kontak"
+                  onClick={onClose}
+                  className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                >
+                  Diskusi Project Serupa
+                </a>
+              </div>
+            </aside>
           </div>
         </div>
       </motion.article>
     </motion.div>
+  );
+}
+
+function DetailSection({ number, title, children }) {
+  return (
+    <section className="rounded-2xl border border-zinc-200 bg-white p-5">
+      <div className="flex items-center gap-3">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-zinc-900 text-xs font-semibold text-white">
+          {number}
+        </span>
+        <h4 className="display-font text-xl font-semibold text-zinc-900">{title}</h4>
+      </div>
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function MetaPill({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
+      <div className="text-[11px] uppercase tracking-[0.14em] text-zinc-500">{label}</div>
+      <div className="mt-1 text-sm font-semibold text-zinc-900">{value}</div>
+    </div>
   );
 }
 
@@ -741,7 +1036,8 @@ function BackgroundDecor({ shouldReduceMotion }) {
         animate={shouldReduceMotion ? undefined : { x: [0, -50, 0], y: [0, 35, 0] }}
         transition={shouldReduceMotion ? undefined : { duration: 20, repeat: Infinity, ease: 'easeInOut' }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.44),rgba(250,250,250,0.98)_48%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.42),rgba(250,250,250,0.98)_48%)]" />
+      <div className="spotlight-layer absolute inset-0" />
       <div className="absolute inset-0 bg-grid-pattern opacity-[0.35]" />
     </div>
   );
@@ -753,7 +1049,7 @@ function Footer() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 text-sm text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="display-font font-semibold text-zinc-900">Martio Husein Samsu</span>
-          <span className="ml-2 text-zinc-500">Backend Developer</span>
+          <span className="ml-2 text-zinc-500">Fullstack Developer</span>
         </div>
         <div className="text-zinc-500">(c) {new Date().getFullYear()} All rights reserved.</div>
       </div>
