@@ -1,9 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
-import Puspadaya from './images/Puspadaya.png';
-import GetHub from './images/Gethub.png';
-import SistemInformasi from './images/Sistem-Informasi.png';
-import LamarFit from './images/Lamarfit.png';
 import profil from './images/profil.png';
 
 const NAV_ITEMS = [
@@ -33,6 +29,40 @@ const TECH_STACK = [
   'GCP',
 ];
 
+const projectImageContext = require.context('./images/projects', true, /\.(png|jpe?g|webp|avif)$/);
+
+const toImageLabel = (path) => {
+  const fileName = path.split('/').pop()?.replace(/\.[^/.]+$/, '') ?? 'Preview';
+  if (fileName.toLowerCase() === 'preview') return 'Preview utama';
+
+  return fileName
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+const getProjectImages = (folder) =>
+  projectImageContext
+    .keys()
+    .filter((path) => path.startsWith(`./${folder}/`))
+    .sort((first, second) => {
+      const firstIsPreview = /\/preview\.(png|jpe?g|webp|avif)$/i.test(first);
+      const secondIsPreview = /\/preview\.(png|jpe?g|webp|avif)$/i.test(second);
+      if (firstIsPreview && !secondIsPreview) return -1;
+      if (!firstIsPreview && secondIsPreview) return 1;
+      return first.localeCompare(second);
+    })
+    .map((path) => ({
+      src: projectImageContext(path),
+      label: toImageLabel(path),
+    }));
+
+const PUSPADAYA_GALLERY = getProjectImages('puspadaya');
+const GETHUB_GALLERY = getProjectImages('gethub');
+const LAMAR_FIT_GALLERY = getProjectImages('lamar-fit');
+const SISTEM_INFORMASI_GALLERY = getProjectImages('sistem-informasi');
+
 const PROJECTS = [
   {
     id: 1,
@@ -59,8 +89,9 @@ const PROJECTS = [
       'Petugas dapat memantau kondisi ibu dan anak dalam satu dashboard terintegrasi.',
       'Keputusan intervensi bisa dilakukan lebih awal berbasis sinyal risiko.',
     ],
-    technologies: ['TypeScript', 'NestJS', 'MySQL'],
-    image: Puspadaya,
+    technologies: ['TypeScript', 'NestJS', 'Node.js', 'REST API', 'MySQL', 'TypeORM', 'JWT Auth', 'Swagger', 'Docker', 'Nginx'],
+    image: PUSPADAYA_GALLERY[0].src,
+    gallery: PUSPADAYA_GALLERY,
   },
   {
     id: 2,
@@ -87,8 +118,9 @@ const PROJECTS = [
       'Tim rekrutmen bisa menyaring kandidat dengan proses yang lebih terukur.',
       'Integrasi backend dan engine AI menjadi lebih rapi untuk iterasi fitur berikutnya.',
     ],
-    technologies: ['TypeScript', 'Node.js', 'Express', 'MongoDB'],
-    image: GetHub,
+    technologies: ['TypeScript', 'Node.js', 'Express', 'REST API', 'MongoDB', 'Mongoose', 'AI Matching', 'JWT Auth', 'Redis', 'Docker'],
+    image: GETHUB_GALLERY[0].src,
+    gallery: GETHUB_GALLERY,
   },
   {
     id: 4,
@@ -116,8 +148,9 @@ const PROJECTS = [
       'Proses membuat CV dari nol menjadi lebih cepat dan terarah.',
       'Struktur data mendukung iterasi produk AI dan personalisasi lanjutan.',
     ],
-    technologies: ['Next.js', 'PostgreSQL', 'AI Integration'],
-    image: LamarFit,
+    technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'PostgreSQL', 'Prisma', 'NextAuth', 'AI Integration', 'VPS', 'Nginx', 'PM2'],
+    image: LAMAR_FIT_GALLERY[0].src,
+    gallery: LAMAR_FIT_GALLERY,
   },
   {
     id: 3,
@@ -144,12 +177,23 @@ const PROJECTS = [
       'Mahasiswa serta dosen mendapat akses informasi yang lebih konsisten.',
       'Beban proses administratif manual menurun secara signifikan.',
     ],
-    technologies: ['PHP', 'Laravel', 'MySQL', 'Bootstrap'],
-    image: SistemInformasi,
+    technologies: ['PHP', 'Laravel', 'Blade', 'Bootstrap', 'MySQL', 'Eloquent ORM', 'REST API', 'Role Access', 'Apache', 'Shared Hosting'],
+    image: SISTEM_INFORMASI_GALLERY[0].src,
+    gallery: SISTEM_INFORMASI_GALLERY,
   },
 ];
 
 const FILTERS = ['Semua', 'HealthTech', 'AI Platform', 'Education'];
+
+const getProjectGallery = (project) =>
+  project.gallery?.length
+    ? project.gallery
+    : [
+        {
+          src: project.image,
+          label: 'Preview utama',
+        },
+      ];
 
 const SOCIALS = [
   {
@@ -717,31 +761,14 @@ function ProjectsSection({ fadeInUp, setSelectedProject, shouldReduceMotion }) {
               className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.7rem] border border-zinc-200 bg-white shadow-[0_18px_34px_rgba(9,9,11,0.08)]"
               onClick={() => setSelectedProject(project)}
             >
-              <div className="relative h-52 overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={`Preview ${project.title}`}
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
-                <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-zinc-950/55 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-                  {project.year}
-                </div>
-              </div>
+              <ProjectCardPreview project={project} />
 
               <div className="flex flex-1 flex-col p-6">
                 <div className="mb-2 text-[11px] uppercase tracking-[0.14em] text-blue-700">{project.category}</div>
                 <h3 className="display-font text-2xl font-semibold text-zinc-950">{project.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600">{project.summary}</p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <span key={`${project.id}-${tech}`} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-700">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+                <ProjectTechStack project={project} />
 
                 <div className="mt-6 inline-flex items-center text-sm font-semibold text-blue-700">
                   Lihat detail
@@ -754,6 +781,95 @@ function ProjectsSection({ fadeInUp, setSelectedProject, shouldReduceMotion }) {
           ))}
         </AnimatePresence>
       </motion.div>
+    </div>
+  );
+}
+
+function ProjectCardPreview({ project }) {
+  const gallery = getProjectGallery(project);
+  const hasMultipleImages = gallery.length > 1;
+
+  if (hasMultipleImages) {
+    const previewImages = gallery.slice(0, 3);
+    const secondaryImages = previewImages.slice(1);
+
+    return (
+      <div className="relative h-52 overflow-hidden bg-zinc-950 p-2">
+        <div className="grid h-full grid-cols-[1fr_5rem] gap-2">
+          <div className="relative min-w-0 overflow-hidden rounded-[1.15rem] bg-zinc-800">
+            <img
+              src={previewImages[0].src}
+              alt={`${previewImages[0].label} ${project.title}`}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+
+          <div className="grid min-w-0 gap-2">
+            {secondaryImages.map((item) => (
+              <div key={`${project.id}-card-collage-${item.label}`} className="overflow-hidden rounded-xl bg-zinc-800">
+                <img src={item.src} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+              </div>
+            ))}
+            {secondaryImages.length === 1 && gallery.length > 2 && (
+              <div className="flex items-center justify-center rounded-xl border border-white/10 bg-white/10 text-[11px] font-bold uppercase tracking-[0.12em] text-white/80">
+                +{gallery.length - 2}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/55 via-transparent to-zinc-950/25" />
+        <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-zinc-950/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+          {project.year}
+        </div>
+        <div className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-zinc-950 shadow-lg shadow-zinc-950/20 backdrop-blur">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16v12H4z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7l1.4-2h5.2L16 7" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 13a3 3 0 106 0 3 3 0 00-6 0z" />
+          </svg>
+          {gallery.length} gambar
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative h-52 overflow-hidden bg-zinc-100">
+      <img
+        src={gallery[0].src}
+        alt={`${gallery[0].label} ${project.title}`}
+        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
+      <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-zinc-950/55 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+        {project.year}
+      </div>
+    </div>
+  );
+}
+
+function ProjectTechStack({ project }) {
+  return (
+    <div className="mt-5 rounded-2xl border border-zinc-200 bg-zinc-50/80 p-3">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">Tech Stack</div>
+        <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-700">
+          {project.technologies.length} tools
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {project.technologies.map((tech) => (
+          <span
+            key={`${project.id}-${tech}`}
+            className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-700 shadow-sm"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -868,6 +984,11 @@ function ContactInfo({ title, value }) {
 }
 
 function ProjectModal({ onClose, project, shouldReduceMotion }) {
+  const gallery = getProjectGallery(project);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const activeImage = gallery[activeImageIndex] ?? gallery[0];
+  const hasMultipleImages = gallery.length > 1;
+
   useEffect(() => {
     const onEscape = (event) => {
       if (event.key === 'Escape') onClose();
@@ -895,17 +1016,77 @@ function ProjectModal({ onClose, project, shouldReduceMotion }) {
         className="max-h-[88vh] w-full max-w-5xl overflow-auto rounded-[2rem] border border-zinc-200 bg-white shadow-[0_24px_58px_rgba(9,9,11,0.3)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="relative h-64 overflow-hidden sm:h-[22rem]">
-          <img src={project.image} alt={`Detail visual ${project.title}`} className="h-full w-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent" />
-          <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
-            <div className="rounded-full border border-white/30 bg-zinc-950/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
-              {project.category}
-            </div>
-            <div className="rounded-full border border-white/30 bg-zinc-950/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
-              {project.year}
+        <div className="relative overflow-hidden bg-zinc-100">
+          <div className="relative h-64 overflow-hidden bg-zinc-950 sm:h-[24rem]">
+            <img
+              src={activeImage.src}
+              alt=""
+              className="absolute inset-0 h-full w-full scale-105 object-cover opacity-35 blur-xl"
+              loading="lazy"
+              aria-hidden="true"
+            />
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={`${project.id}-${activeImageIndex}`}
+                src={activeImage.src}
+                alt={`${activeImage.label} ${project.title}`}
+                className="relative z-10 h-full w-full object-contain"
+                loading="lazy"
+                initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.02 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.99 }}
+                transition={{ duration: 0.24 }}
+              />
+            </AnimatePresence>
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/25 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-end justify-between gap-3">
+              <div className="flex flex-wrap gap-2">
+                <div className="rounded-full border border-white/30 bg-zinc-950/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
+                  {project.category}
+                </div>
+                <div className="rounded-full border border-white/30 bg-zinc-950/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
+                  {project.year}
+                </div>
+              </div>
+              <div className="max-w-full rounded-full border border-white/30 bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-zinc-900 shadow-lg shadow-zinc-950/10 backdrop-blur">
+                {activeImage.label}
+              </div>
             </div>
           </div>
+
+          {hasMultipleImages && (
+            <div className="border-t border-zinc-200 bg-white px-4 py-3 sm:px-6">
+              <div className="flex gap-3 overflow-x-auto pb-1">
+                {gallery.map((item, index) => {
+                  const isActive = activeImageIndex === index;
+                  return (
+                    <button
+                      key={`${project.id}-gallery-${item.label}`}
+                      type="button"
+                      onClick={() => setActiveImageIndex(index)}
+                      className={`group/thumb flex min-w-[9rem] cursor-pointer items-center gap-3 rounded-xl border p-2 text-left transition ${
+                        isActive
+                          ? 'border-zinc-950 bg-zinc-950 text-white shadow-[0_12px_28px_rgba(9,9,11,0.18)]'
+                          : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-zinc-400 hover:bg-white'
+                      }`}
+                      aria-label={`Tampilkan ${item.label}`}
+                    >
+                      <span className="h-12 w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-200">
+                        <img src={item.src} alt="" className="h-full w-full bg-white object-contain transition duration-300 group-hover/thumb:scale-105" loading="lazy" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] opacity-70">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span className="mt-0.5 block truncate text-xs font-semibold">{item.label}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <button
             type="button"
             onClick={onClose}
