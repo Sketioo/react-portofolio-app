@@ -1,20 +1,24 @@
 {
   "files": {
-    "main.css": "/react-portofolio-app/static/css/main.3d1d3b45.css",
-    "main.js": "/react-portofolio-app/static/js/main.f3888fda.js",
-    "static/js/453.f81f80e4.chunk.js": "/react-portofolio-app/static/js/453.f81f80e4.chunk.js",
-    "static/media/Sistem-Informasi.png": "/react-portofolio-app/static/media/Sistem-Informasi.9e7b9015fc9b6525c247.png",
-    "static/media/Lamarfit.png": "/react-portofolio-app/static/media/Lamarfit.98146bef4a3fac66ec0e.png",
-    "static/media/Gethub.png": "/react-portofolio-app/static/media/Gethub.0d0c800b089e8e726204.png",
-    "static/media/profil.png": "/react-portofolio-app/static/media/profil.8ab3e370ff862f9dd869.png",
-    "static/media/Puspadaya.png": "/react-portofolio-app/static/media/Puspadaya.faf4cd83f88400ba2c83.png",
+    "main.css": "/react-portofolio-app/static/css/main.fbf86eeb.css",
+    "main.js": "/react-portofolio-app/static/js/main.f3844432.js",
+    "static/js/453.dbf118a5.chunk.js": "/react-portofolio-app/static/js/453.dbf118a5.chunk.js",
+    "static/media/preview.png": "/react-portofolio-app/static/media/preview.0d0c800b089e8e726204.png",
+    "static/media/dashboard.png": "/react-portofolio-app/static/media/dashboard.ff322c306cf534547058.png",
+    "static/media/main-features.png": "/react-portofolio-app/static/media/main-features.7e3332301ffd501ca286.png",
+    "static/media/job-reccomendation.png": "/react-portofolio-app/static/media/job-reccomendation.471b603a1f6a4c219b96.png",
+    "static/media/landing-page.png": "/react-portofolio-app/static/media/landing-page.d068a458e5b03a673437.png",
+    "static/media/gethub-1.png": "/react-portofolio-app/static/media/gethub-1.6682574b3617961dd39a.png",
+    "static/media/gethub-2.png": "/react-portofolio-app/static/media/gethub-2.5c12c2957b5db58c2712.png",
+    "static/media/profil.jpeg": "/react-portofolio-app/static/media/profil.f0fffcc42839c03f18bd.jpeg",
+    "static/media/dinamis-dashboard.png": "/react-portofolio-app/static/media/dinamis-dashboard.4f5123efb6f96b5a0210.png",
     "index.html": "/react-portofolio-app/index.html",
-    "main.3d1d3b45.css.map": "/react-portofolio-app/static/css/main.3d1d3b45.css.map",
-    "main.f3888fda.js.map": "/react-portofolio-app/static/js/main.f3888fda.js.map",
-    "453.f81f80e4.chunk.js.map": "/react-portofolio-app/static/js/453.f81f80e4.chunk.js.map"
+    "main.fbf86eeb.css.map": "/react-portofolio-app/static/css/main.fbf86eeb.css.map",
+    "main.f3844432.js.map": "/react-portofolio-app/static/js/main.f3844432.js.map",
+    "453.dbf118a5.chunk.js.map": "/react-portofolio-app/static/js/453.dbf118a5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3d1d3b45.css",
-    "static/js/main.f3888fda.js"
+    "static/css/main.fbf86eeb.css",
+    "static/js/main.f3844432.js"
   ]
 }
