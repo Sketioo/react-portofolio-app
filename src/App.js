@@ -1049,7 +1049,7 @@ function AboutSection({ fadeInUp, shouldReduceMotion }) {
         whileInView="visible"
         viewport={{ once: true, amount: 0.25 }}
         transition={{ duration: 0.45 }}
-        className="mb-16 text-center"
+        className="mb-16"
       >
         <div className="section-kicker">Tentang Saya</div>
         <h2 className="display-font mt-3 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">
