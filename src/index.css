@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 html {
   scroll-behavior: smooth;
@@ -10,7 +10,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fafafa;
@@ -19,7 +19,7 @@ body {
 }
 
 .display-font {
-  font-family: 'Archivo', 'Space Grotesk', sans-serif;
+  font-family: 'Archivo', 'DM Sans', sans-serif;
 }
 
 .app-shell {
@@ -52,6 +52,23 @@ body {
   background: #2563eb;
 }
 
+.text-balance {
+  text-wrap: balance;
+}
+
+.glass-panel {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.62));
+  border: 1px solid rgba(228, 228, 231, 0.78);
+  box-shadow: 0 24px 70px rgba(24, 24, 27, 0.11);
+  backdrop-filter: blur(18px);
+}
+
+.premium-surface {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(244, 244, 245, 0.86)),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.08), rgba(9, 9, 11, 0.04));
+}
+
 .bg-grid-pattern {
   background-image:
     linear-gradient(to right, rgba(63, 63, 70, 0.07) 1px, transparent 1px),
@@ -61,6 +78,14 @@ body {
 
 .spotlight-layer {
   background: radial-gradient(420px circle at var(--spot-x) var(--spot-y), rgba(37, 99, 235, 0.2), transparent 70%);
+}
+
+.grain-layer {
+  background-image:
+    linear-gradient(rgba(9, 9, 11, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(9, 9, 11, 0.025) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
 }
 
 :focus-visible {
