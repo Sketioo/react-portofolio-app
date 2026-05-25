@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/react-portofolio-app/static/css/main.fe2f9746.css",
-    "main.js": "/react-portofolio-app/static/js/main.ac390459.js",
+    "main.css": "/react-portofolio-app/static/css/main.e2536080.css",
+    "main.js": "/react-portofolio-app/static/js/main.f81ceb99.js",
     "static/js/453.dbf118a5.chunk.js": "/react-portofolio-app/static/js/453.dbf118a5.chunk.js",
     "static/media/preview.png": "/react-portofolio-app/static/media/preview.0d0c800b089e8e726204.png",
     "static/media/dashboard.png": "/react-portofolio-app/static/media/dashboard.ff322c306cf534547058.png",
@@ -13,12 +13,12 @@
     "static/media/profil.jpeg": "/react-portofolio-app/static/media/profil.f0fffcc42839c03f18bd.jpeg",
     "static/media/dinamis-dashboard.png": "/react-portofolio-app/static/media/dinamis-dashboard.4f5123efb6f96b5a0210.png",
     "index.html": "/react-portofolio-app/index.html",
-    "main.fe2f9746.css.map": "/react-portofolio-app/static/css/main.fe2f9746.css.map",
-    "main.ac390459.js.map": "/react-portofolio-app/static/js/main.ac390459.js.map",
+    "main.e2536080.css.map": "/react-portofolio-app/static/css/main.e2536080.css.map",
+    "main.f81ceb99.js.map": "/react-portofolio-app/static/js/main.f81ceb99.js.map",
     "453.dbf118a5.chunk.js.map": "/react-portofolio-app/static/js/453.dbf118a5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fe2f9746.css",
-    "static/js/main.ac390459.js"
+    "static/css/main.e2536080.css",
+    "static/js/main.f81ceb99.js"
   ]
 }
