@@ -1,21 +1,24 @@
 {
   "files": {
-    "main.css": "/react-portofolio-app/static/css/main.b12befe0.css",
-    "main.js": "/react-portofolio-app/static/js/main.3ec3630f.js",
-    "static/js/206.20524134.chunk.js": "/react-portofolio-app/static/js/206.20524134.chunk.js",
-    "static/media/preview.png": "/react-portofolio-app/static/media/preview.0d0c800b089e8e726204.png",
-    "static/media/dashboard.png": "/react-portofolio-app/static/media/dashboard.ff322c306cf534547058.png",
-    "static/media/main-features.png": "/react-portofolio-app/static/media/main-features.7e3332301ffd501ca286.png",
-    "static/media/job-reccomendation.png": "/react-portofolio-app/static/media/job-reccomendation.471b603a1f6a4c219b96.png",
-    "static/media/landing-page.png": "/react-portofolio-app/static/media/landing-page.d068a458e5b03a673437.png",
-    "static/media/gethub-1.png": "/react-portofolio-app/static/media/gethub-1.6682574b3617961dd39a.png",
-    "static/media/gethub-2.png": "/react-portofolio-app/static/media/gethub-2.5c12c2957b5db58c2712.png",
-    "static/media/profil.jpeg": "/react-portofolio-app/static/media/profil.f0fffcc42839c03f18bd.jpeg",
-    "static/media/dinamis-dashboard.png": "/react-portofolio-app/static/media/dinamis-dashboard.4f5123efb6f96b5a0210.png",
-    "index.html": "/react-portofolio-app/index.html"
+    "main.css": "/static/css/main.ad7ebc0d.css",
+    "main.js": "/static/js/main.b38fabd3.js",
+    "static/js/206.20524134.chunk.js": "/static/js/206.20524134.chunk.js",
+    "static/media/preview.png": "/static/media/preview.0d0c800b089e8e726204.png",
+    "static/media/featured-works.png": "/static/media/featured-works.8feddbe433859e617308.png",
+    "static/media/dashboard.png": "/static/media/dashboard.ff322c306cf534547058.png",
+    "static/media/main-features.png": "/static/media/main-features.7e3332301ffd501ca286.png",
+    "static/media/job-reccomendation.png": "/static/media/job-reccomendation.471b603a1f6a4c219b96.png",
+    "static/media/featured-artists.png": "/static/media/featured-artists.221d0ad0965c23374803.png",
+    "static/media/landing-page.png": "/static/media/landing-page.d068a458e5b03a673437.png",
+    "static/media/landing.png": "/static/media/landing.3c48708f8a98c04c52de.png",
+    "static/media/gethub-1.png": "/static/media/gethub-1.6682574b3617961dd39a.png",
+    "static/media/gethub-2.png": "/static/media/gethub-2.5c12c2957b5db58c2712.png",
+    "static/media/profil.jpeg": "/static/media/profil.f0fffcc42839c03f18bd.jpeg",
+    "static/media/dinamis-dashboard.png": "/static/media/dinamis-dashboard.4f5123efb6f96b5a0210.png",
+    "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.b12befe0.css",
-    "static/js/main.3ec3630f.js"
+    "static/css/main.ad7ebc0d.css",
+    "static/js/main.b38fabd3.js"
   ]
 }
